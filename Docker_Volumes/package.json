@@ -2,7 +2,7 @@
   "name": "docker360",
   "version": "1.0.0",
   "description": "This is the project which deals with most important concepts of docker volumes and their uses.",
-  "main": "server.js",
+  "main": "nodemon server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "server.js"
@@ -21,7 +21,6 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
-    // This is the dependency that watches the changes in the node server and restarts it automatically.
     "nodemon": "3.0.0" 
   }
 }
