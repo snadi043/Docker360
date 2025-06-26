@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 80
 
 #STEP: 7 -> Enable the command to run the application
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
 
 
 
