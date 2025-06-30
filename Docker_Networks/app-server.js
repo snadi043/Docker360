@@ -85,16 +85,18 @@ app.get('/people', async(req, res) => {
     }
 });
 
+app.listen(3000);
+
 // Middlware to connect with the mongo database and the node application.
-mongoose.connect('mongodb://localhost:27017/star-wars-favorites')
-    .then((res) => {
-        console.log("Database connected.");
-    })
-    .catch((err) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            app.listen(3000);
-        }
-    });
+// mongoose.connect('mongodb://localhost:27017/star-wars-favorites')
+//     .then((res) => {
+//         console.log("Database connected.");
+//     })
+//     .catch((err) => {
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             app.listen(3000);
+//         }
+//     });
