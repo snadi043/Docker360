@@ -8,7 +8,6 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 
 // Importing the Model to use it in the database connection and communication.
-const Favorites = require('./models/favorites');
 const Favorite = require('./models/favorites');
 
 // Configuring the app with express framework.
@@ -19,7 +18,7 @@ app.use(bodyParser.json());
 
 // Middleware to handle the "GET" request in order to fetch the favorites in the application.
 app.get('/favorites', async(req, res) => {
-    const favorites = await Favorites.find();
+    const favorites = await Favorite.find();
     res.status(200).json({
         favorites: favorites
     });
@@ -47,7 +46,7 @@ app.post('/favorites', async(req, res) => {
     }
 
     // Once, filtering the requested data, adding it to the model.
-    const favorites = new Favorite({
+    const favorite = new Favorite({
         name: favName,
         type: favType,
         url: favUrl
@@ -55,8 +54,8 @@ app.post('/favorites', async(req, res) => {
 
     // Again, implementing the "try" and "catch" block to post the data to the url endpoint, if not throw error.
     try{
-        await favorites.save();
-        res.status(201).json({message: 'Favorite added.', favorites: favorites.toObject()});
+        await favorite.save();
+        res.status(201).json({message: 'Favorite added.', favorite: favorite.toObject()});
     }
     catch(err){
         res.status(500).json({message: 'Something went wrong.'});
@@ -66,7 +65,7 @@ app.post('/favorites', async(req, res) => {
 // Middleware to handle the "GET" request to communicate with the thrid-party API using "axios" package.
 app.get('/movies', async (req, res) => {
     try{
-        const response = await axios.get('https://swapi.dev/api/films');
+        const response = await axios.get('https://swapi.py4e.com/api/films');
         res.status(200).json({movies: response.data});
     }
     catch(err){
@@ -77,7 +76,7 @@ app.get('/movies', async (req, res) => {
 // Middleware to handle the "POST" request to communicate with the thrid-party API using "axios" package.
 app.get('/people', async(req, res) => {
     try {
-        const response = await axios.get('https://swapi.dev/api/people');
+        const response = await axios.get('https://swapi.py4e.com/api/people');
         res.status(200).json({ people: response.data });
     } 
   catch (error) {
@@ -85,18 +84,18 @@ app.get('/people', async(req, res) => {
     }
 });
 
-app.listen(3000);
+// app.listen(3000);
 
 // Middlware to connect with the mongo database and the node application.
-// mongoose.connect('mongodb://localhost:27017/star-wars-favorites')
-//     .then((res) => {
-//         console.log("Database connected.");
-//     })
-//     .catch((err) => {
-//         if(err){
-//             console.log(err);
-//         }
-//         else{
-//             app.listen(3000);
-//         }
-//     });
+mongoose.connect('mongodb://127.0.0.1:27017/')
+    .then((res) => {
+        console.log("Database connected.");
+    })
+    .catch((err) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            app.listen(3000);
+        }
+    });
