@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/snadi043/Docker360/issues"
   },
-  "homepage": "https://github.com/snadi043/Docker360#readme"
+  "homepage": "https://github.com/snadi043/Docker360#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.1",
+    "morgan": "^1.10.0"
+  }
 }
