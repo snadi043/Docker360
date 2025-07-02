@@ -87,7 +87,7 @@ app.get('/people', async(req, res) => {
 // app.listen(3000);
 
 // Middlware to connect with the mongo database and the node application.
-mongoose.connect('mongodb://172.17.0.2:27017/')
+mongoose.connect('mongodb://docker-mongo-app:27017/')
     .then((res) => {
         console.log("Database connected.");
     })
