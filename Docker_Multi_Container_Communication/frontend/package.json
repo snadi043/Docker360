@@ -1,8 +1,7 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "description": "This is the frontend application of the project which handles the UI the user interacts with and it is hosted in an isolated container to achieve the performance of the cross-container-communication feature in docker.",
-  "main": "index.js",
+  "name": "docker-frontend",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -35,15 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/snadi043/Docker360.git"
-  },
-  "author": "SAI",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/snadi043/Docker360/issues"
-  },
-  "homepage": "https://github.com/snadi043/Docker360#readme"
+  }
 }
