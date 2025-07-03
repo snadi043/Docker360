@@ -18,3 +18,4 @@
 ::1 - - [03/Jul/2025:20:24:04 +0000] "GET /goals HTTP/1.1" 200 12 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
 ::1 - - [03/Jul/2025:20:33:58 +0000] "OPTIONS /goals HTTP/1.1" 200 15 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
 ::1 - - [03/Jul/2025:20:33:59 +0000] "POST /goals HTTP/1.1" 201 85 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+::1 - - [03/Jul/2025:20:34:50 +0000] "GET /goals HTTP/1.1" 200 65 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
