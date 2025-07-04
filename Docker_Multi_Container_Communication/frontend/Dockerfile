@@ -39,3 +39,14 @@ CMD [ "npm", "start" ]
     # For, the frontend container the flags --it and the port 3000:3000 should be added to avoid the issues with react-projects build and allwoing the "url"s in the frontend which are dealing with "localhost" to enable communication with the backend "apis" exposed on port "80". 
 # So, basically --network flag is to make a centralized communication within the network among all the conatiners
 #               -p 3000:3000 and  -p 80:80 is to communicate the internals of frontend with the backedn which is (endpoint and api) communication.
+
+
+# In the same project, to make the data persistent in the container we have to create the container which are enabled with volumes.
+# This configuration of containers with volumes helps us to restore the data/state in the application when the container are restarted but not when they are removed.
+# So, in this project an extension is made such that a named volume is added to the conatiner creation and the command fot that is as follows
+    # "docker run -p 80:80 -d -t --rm -v mongo-named-volume-data:/data/db --network docker-goals-app-network --name docker-backend docker-backend"
+
+# In Addition, it is also important to enable the security in allowing the connections to the database when using th containers.
+# This can be implemented by using the environment variables to setup the access using username and password for the database and refactoring the source code accordingly.
+# The command to configure the environment variables to the containers is as follows.
+    # "docker run -p 80:80 -d -e MONGO_INITDB_ROOT_USERNAME={username} -e MONGO_INITDB_ROOT_PASSWORD={password} -v mongo-named-volume-data:/data/db --network docker-goals-app-network --name docker-backend docker-backend"
