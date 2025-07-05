@@ -4,7 +4,8 @@
   "description": "This is the backend application of the project which handles the API communications with the Frontend and the Database and it is hosted in an isolated container to achieve the performance of cross-container-communication feature in docker.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
     "express": "^5.1.0",
     "mongoose": "^8.16.1",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.10"
   }
 }
