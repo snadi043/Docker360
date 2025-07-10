@@ -1,0 +1,19 @@
+{
+  "name": "docker_production_deployment",
+  "version": "1.0.0",
+  "description": "This project deals with the procedure to make the web application integrated with docker deployment ready with AWS cloud services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snadi043/Docker360.git"
+  },
+  "author": "SAI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snadi043/Docker360/issues"
+  },
+  "homepage": "https://github.com/snadi043/Docker360#readme"
+}
