@@ -1,0 +1,28 @@
+<!-- This project main focus will be on how an application which is created and developed locally on the developers local machine (environment) is configured to deploy in cloud and host the web application to the users. The complete details, architecture flow and tech stack are described below. -->
+
+<!-- Tech Stack  -->
+
+    - Node JS framework
+    - Docker
+    - AWS EC2
+    - SSH Configuration 
+    - Github
+    - REST API
+   
+<!-- ARCHITECTURE FLOW  -->
+
+The main application which is basically a NODE based normal application which has REST API's and endpoints to build the communication in between the backend code and the local node server which handle CRUD operations using HTTP methods like GET,POST,UPDATE and DELETE.
+
+To make all the version changes and code commits this project is integrated with GITHUB and the repository for the application is ----------------------
+
+Also, to make this project easy to ship and make it able to run in the same way in all environments, it is build and integrated with Containerization Tool which is DOCKER and the image and container details are defined below.
+    Docker image : ---------------------
+    Docker container: -------------------
+
+Once, all the above steps are done, the application is then deployed in AWS cloud platform using EC2 service to configure the app with all the security, access control and hosting.
+    Detailed Steps include:
+        - Configuring an AWS EC2 Instance with all the specifications dealing with (OS, RAM, STORAGE, NETWORKING etc.)
+        - Configuring the proper access to make sure who can use the application, in a way to control the traffic and implement a layer of security to the application.
+        -  Launching the instance.
+
+Finally, after the application is integrated with docker and the final image is locked, the application is then deployed into the above created AWS EC2 instance to host in the cloud using SSH (Secure Shell) and then install DOCKER in the EC2 Instance and run the image in that instance.
