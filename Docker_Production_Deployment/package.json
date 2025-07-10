@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/snadi043/Docker360/issues"
   },
-  "homepage": "https://github.com/snadi043/Docker360#readme"
+  "homepage": "https://github.com/snadi043/Docker360#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
