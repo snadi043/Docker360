@@ -1,7 +1,7 @@
 # This is the simple dockerfile for this project which is important to build the image and then create a container on the image.
 
 # Sourcing the node image from the dockerhub 
-FROM node:14-alpine
+FROM 'node'
 
 # Creating the working directory for the application to then create and store files.
 WORKDIR /app

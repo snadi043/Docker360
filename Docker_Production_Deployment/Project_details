@@ -13,11 +13,12 @@
 
 The main application which is basically a NODE based normal application which has REST API's and endpoints to build the communication in between the backend code and the local node server which handle CRUD operations using HTTP methods like GET,POST,UPDATE and DELETE.
 
-To make all the version changes and code commits this project is integrated with GITHUB and the repository for the application is ----------------------
+To make all the version changes and code commits this project is integrated with GITHUB and the repository for the application is 
+https://github.com/snadi043/Docker360.git
 
 Also, to make this project easy to ship and make it able to run in the same way in all environments, it is build and integrated with Containerization Tool which is DOCKER and the image and container details are defined below.
-    Docker image : ---------------------
-    Docker container: -------------------
+    Docker image : docker-prod-container-cloud-deployment
+    Docker container: docker-prod-cloud-deploy
 
 Once, all the above steps are done, the application is then deployed in AWS cloud platform using EC2 service to configure the app with all the security, access control and hosting.
     Detailed Steps include:
@@ -25,4 +26,14 @@ Once, all the above steps are done, the application is then deployed in AWS clou
         - Configuring the proper access to make sure who can use the application, in a way to control the traffic and implement a layer of security to the application.
         -  Launching the instance.
 
-Finally, after the application is integrated with docker and the final image is locked, the application is then deployed into the above created AWS EC2 instance to host in the cloud using SSH (Secure Shell) and then install DOCKER in the EC2 Instance and run the image in that instance.
+Finally, after the application is integrated with docker and the final image is locked, the application is then deployed into the above created AWS EC2 instance to host in the cloud using SSH (Secure Shell) and then install DOCKER in the EC2 Instance and run the image in that instance. The commands and the setup for the instance and the shell connection are defined below.
+    - Instance ID - i-0b5f4225781edcef5 (node-app-cloud-deploy)
+    - Open an SSH client. (For Linux and MacOS it is already enabled in the sytem).
+    - Place the private key file generated when creating the instance in root directory of the project.
+    - Run this command, if necessary, to ensure your key is not publicly viewable.
+            chmod 400 "permission file name"
+    - Connect to your instance using its Public DNS:
+            ec2-3-147-79-144.us-east-2.compute.amazonaws.com
+
+Example:
+ssh -i "node-app-cloud-deploy.pem" ec2-user@ec2-3-147-79-144.us-east-2.compute.amazonaws.com
