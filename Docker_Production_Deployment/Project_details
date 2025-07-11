@@ -4,6 +4,7 @@
 
     - Node JS framework
     - Docker
+    - Dockerhub
     - AWS EC2
     - SSH Configuration 
     - Github
@@ -37,3 +38,30 @@ Finally, after the application is integrated with docker and the final image is 
 
 Example:
 ssh -i "node-app-cloud-deploy.pem" ec2-user@ec2-3-147-79-144.us-east-2.compute.amazonaws.com
+
+Installing the Docker application in the remote machine which is on above created AWS EC2 instance.
+The steps to follow to install the docker remotely is as follows.
+    - sudo yum update -y
+    - sudo yum -y install docker
+    - sudo service docker start
+    - sudo usermod -a -G docker ec2-user
+    # Make sure to log out + back in after running these commands.
+    - sudo systemctl enable docker
+    - docker version
+After running the docker version command it has to display all the docker information installed in the remote istance.
+
+Deploying the source code from the local machine into the remote machine which is the AWS EC2 instance created in the above steps.
+- This process can be done in two steps
+  1. Migrating the source code directly from the local machine to remote machine and then building an image and run the conatainer in the remote machine using the docker application which is installed previously with SSH commands.
+  2. Building the docker image and the container in the local machine and then migrating the source code through the already build docker image to the dockerhub by creating a repository in the dockerhub and then running that image in our remote machine. (AWS EC2 instance).
+- When using the step-1, there are lot of configurations and steps the developer has to deal with, which is cumbersome.
+- So, the best and most optimized solution is to follow step-2.
+
+Steps and Procedure involved while deploying the source code from local machine into the remote remote machine based on procedure explained in line 56.
+    - Signing to your dockerhub account.
+    - Create a new repository with the matchable project name.
+    - Build an image in your local machine and then assign a tag to that image which matches the remote dockerhub project name.
+    - Create a connection from the local docker terminal to dockerhub in the browser with username/password or code confirmation mechanism
+    - Push the image to the dockerhub with the displayed docker push command in the dockerhub.
+            In this project it is as follows
+            docker push snadi043/node-app-cloud-deploy:dockerhub
