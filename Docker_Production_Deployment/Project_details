@@ -1,4 +1,6 @@
-<!-- This project main focus will be on how an application which is created and developed locally on the developers local machine (environment) is configured to deploy in cloud and host the web application to the users. The complete details, architecture flow and tech stack are described below. -->
+<!-- PROJECT SUMMARY -->
+
+This project main focus will be on how an application which is created and developed locally on the developers local machine (environment) is configured to deploy in cloud and host the web application to the users. The complete details, architecture flow and tech stack are described below.
 
 <!-- Tech Stack  -->
 
@@ -65,3 +67,29 @@ Steps and Procedure involved while deploying the source code from local machine 
     - Push the image to the dockerhub with the displayed docker push command in the dockerhub.
             In this project it is as follows
             docker push snadi043/node-app-cloud-deploy:dockerhub
+
+<!-- BOTTLENECKS IN THE PROJECT -->
+
+While working with this project and in the process of launching the source code from the local machine to remote EC2 instance with dockerhub repository an issue was arised which is like a conflict in between the platform / OS in which dockerhub image is build and where this image is being used in the remote EC2 service which is platform / OS of remote AWS EC2 instance. The detailed "WARNINIG" is attached below.
+        WARNING: image with reference snadi043/node-app-cloud-deploy:dockerhub was found but its platform (linux/arm64) does not match the specified platform (linux/amd64) docker.io/snadi043/node-app-cloud-deploy:dockerhub
+
+To avoid this warning, the project image is build again with specific platform flag and the steps, commands are as follows: 
+    - First checking the local machine OS and Platform specifications to match it with docker image OS and platform
+    - In this case, it is apple m1 chip which is arm based, so a docker image with arm specifications has to be build.
+  
+    
+    - Docker is installed in the remote AWS instance from within local machine and in the details of the installation, it is clearly shown that the details of docker application installed in AWS EC2 instance are as follows:
+      - Client:
+      Version:           25.0.8
+      API version:       1.44
+      Go version:        go1.24.2
+      Git commit:        0bab007
+      Built:             Thu May  8 00:00:00 2025
+      OS/Arch:           linux/amd64
+      Context:           default
+  
+    -   To build multi platform images in docker using the docker desktop or docker application itself there are two main procedures.
+    -   The links below helps to create multi-platform docker images.
+                https://docs.docker.com/build/building/multi-platform/
+  
+                https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
