@@ -7,10 +7,14 @@ This project main focus will be on how an application which is created and devel
     - Node JS framework
     - Docker
     - Dockerhub
-    - AWS EC2
+    - AWS EC2 
+    - AWS ECS
+    - AWS ELB
+    - AWS EFS
     - SSH Configuration 
     - Github
     - REST API
+    - MONGODB ATLAS
    
 <!-- ARCHITECTURE FLOW  -->
 
@@ -96,6 +100,15 @@ To avoid this warning, the project image is build again with specific platform f
                 https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
 
     - Once a source is shipped from the local machine to dockerhub to then into remote AWS EC2 instance, we can still update the changes in the source code by just building a new image to the same dockerhub and then pushing that updated image into same remote AWS EC2 instance that was previously created.
+  
+<!-- STEP TO ACCESS THE LOGS IN AWS EC2  -->
+
+    Directly on the EC2 Instance:
+        - Connect to the EC2 instance via SSH or other preferred method. 
+        - Navigate to the /var/log/ directory. 
+        - The /var/log/eb-engine.log file will be present. 
+        - You can then view the file content using cat, less, or other command-line tools. 
+
 
                                             AWS Elastic Container Service (ECS)
 
@@ -113,3 +126,27 @@ To avoid this warning, the project image is build again with specific platform f
   Also, to emphasize on docker compose, the purpose of docker compose suites well in the projects which are scoped to run locally in the local machine where there is only single server is in communication and it is static all the time, but whereas in the case of launching an application using AWS there is no gaurantee that the same server is assigned all the time for the application to host it. So, everytime you make changes and push the image and run the containers in the cluster in the ECS service the server, public IP address changes. But, to execute multi-container commmunication, the same approach of making all the containers in the network talk to each other can be achieved by placing all the clusters in the ECS under a single task. However, the problem with assiginig the same server all the time is something which cannot be solved. Also, in addition to that, in the docker compose there is no flexibility to deal / configure the infrastructure specifications like (CPU, Storage, Mermory, Networks, OS etc) but in the process of deploying the application remotely in AWS all these additional information is neccessary and important. These are the limitations for the docker compose when it is to be utilized in the process of working with AWS ECS service. 
   
   Also, the concept of using the container name as the hostname to pick it up by the docker automatically to build the communication between the conatiners in multi-container communications using docker cannot be replicated when using ECS. So, the domain/host name has to be replaced with environment variable so that a value in the local environment is kept in the .env file and a new variable key value can be configured when creating a cluster in the ECS service. 
+
+  In the above explained scenario, where any changes are pushed into the ECS service and launched the containers again, the public IP address changes. This situation can be addressed with the help of load balancers in offical terms refered as ELASTIC LOAD BALANCING (ELB).
+  The purpose of load balancers is to navigate the incoming traffic to the application instance to all the avalilable servers assigned to the application equally so that none of the individual servers is forced to address heavy traffic. Also, with the help of load balancers we can assure that the pubic IP address is made static even though the changes are made to the containers in the ECS service. However, in AWS there are specific load balancers to specific functionalities. The major Load Balancer types are defined as follows.
+            -   Application Load Balancer (ALB)
+            -   Network Load Balancer (NLB)
+            -   Gateway Load Balancer (GWLB)
+            -   Classic Load Balancer (CLB)
+  
+                                                EFS (Elastic File System)
+  EFS is the AWS service which is very helpful to deal with database storage in the AWS cloud environment which is the remote hardwares which takes care of keeping data persistant even if containers are removed.
+  Basically, when the ECS service is deployed and whenever the changes are pushed to the exisitng containers in the ECS, the data which is present in the container is lost and doesnot persist in the container. To overcome this situation in docker we have the concept of "VOLUMES". Similarly in the AWS cloud environment when working with ECS, we can also integrate the container with EFS (Elastic File System) to make sure the data persists even when the changes are pushed to the same contaianer.
+
+  To configure the EFS service with the ECS service and make both of them working in sync without any issues, a new security group has to be created for the EFS service and sync it with the container which depends upon the need of data persistency (generally the database container).
+
+  However, when doing these confiurations, if we try to create a new change and push it to the existing container and reinitiate the task in the cluster, we might face a problem which is "rolling deployments" in the ECS service.
+    - Firstly "Rolling Deployment" is the strategy which performs the replacement/reinstallation of the instance in the cloud service without stopping/deleting the existing instance in the cloud service to avoid downtime and availability of the application to the users.
+    - So, the problem during this situation with respect to the EFS service is that whenever a new change is pushed, the existing instance and the newly being created instance will be trying to communicate with the same database container to rewrite the same file within the EFS service.  
+  
+  Also, to mention managing the containers for the databases by our own is not all the times vialbe unless you really know what you are actually doing and expert in whole pipeline and architecture flow. So, basically it is a tradeoff between "CONTROL" (application compeletely under your control) to "RESPONSIBILITY" (configuring database cloud service to take the responsibility).
+  In addition, lot of times you end up questing about why it is good to source cloud database services for the application in production.
+
+    - The answer is when dealing with databases (database containers in ECS services), if your are taking the full control of the system you are responsible to make sure that the SCALING (making sure that the database is always available and able to handle loads of simultaneous requests),  PERFORMANCE (loadbalancing, efficient traffic handling) and at top most priority is security and backup.
+    - All the explained situations can be easily handled or addressed with AWS RDS (Relational Database Service) which specially works with RDS databases (i,e MYSQL).
+    - For MongoDB, there is MongoDB Atlas which takes care of problems which are discussed above.  
