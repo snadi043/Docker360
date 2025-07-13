@@ -64,7 +64,8 @@ Steps and Procedure involved while deploying the source code from local machine 
     - Create a new repository with the matchable project name.
     - Build an image in your local machine and then assign a tag to that image which matches the remote dockerhub project name.
     - Create a connection from the local docker terminal to dockerhub in the browser with username/password or code confirmation mechanism
-    - Push the image to the dockerhub with the displayed docker push command in the dockerhub.
+    - Build a new image of the up to date source code and then attach a tag with the dockerhub repository name. 
+    - Then, Push the image to the dockerhub with the displayed docker push command in the dockerhub.
             In this project it is as follows
             docker push snadi043/node-app-cloud-deploy:dockerhub
 
@@ -93,3 +94,22 @@ To avoid this warning, the project image is build again with specific platform f
                 https://docs.docker.com/build/building/multi-platform/
   
                 https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
+
+    - Once a source is shipped from the local machine to dockerhub to then into remote AWS EC2 instance, we can still update the changes in the source code by just building a new image to the same dockerhub and then pushing that updated image into same remote AWS EC2 instance that was previously created.
+
+                                            AWS Elastic Container Service (ECS)
+
+  So far, all the details mentioned above is in a way can be called as (DIY) Do It Yourself process of end-to-end setup of an applicaiton using available infrastructure to host the web application into a domanin in AWS EC2 service to then can be accessed by the users.
+    - This process is good and interesting to know th flow of the application development, building and launching but the difficult part here is not all the developer are keen/interested to explore and invest to know everything that is needed to make the application up and running for various reasons.
+    - So, in such cases there is an alternative to replace the whole of environment/infrastrucutre setup in AWS which is by using AWS service called ECS (Elastic Container Service).
+    - ECS -> It is one of the AWS Services mainly fousing on automating the remote servers in accordance with the source code image from the docker and keeps the application secure, scalable, optimized and traffic efficient and all of these functionalities are managed my AWS for us. So, in a way this process can be refered to as "MANAGED SERVICES".
+    - There are mainly 4 important concepts within Elastic Container Service which are as follows.
+                - Containers 
+                - Tasks
+                - Clusters
+                - Services  
+    - Also, this service is not free to use and the prices are based on the number of instances you configure to host. Other infrastructre pricing (storage, networking, servers etc). 
+  
+  Also, to emphasize on docker compose, the purpose of docker compose suites well in the projects which are scoped to run locally in the local machine where there is only single server is in communication and it is static all the time, but whereas in the case of launching an application using AWS there is no gaurantee that the same server is assigned all the time for the application to host it. So, everytime you make changes and push the image and run the containers in the cluster in the ECS service the server, public IP address changes. But, to execute multi-container commmunication, the same approach of making all the containers in the network talk to each other can be achieved by placing all the clusters in the ECS under a single task. However, the problem with assiginig the same server all the time is something which cannot be solved. Also, in addition to that, in the docker compose there is no flexibility to deal / configure the infrastructure specifications like (CPU, Storage, Mermory, Networks, OS etc) but in the process of deploying the application remotely in AWS all these additional information is neccessary and important. These are the limitations for the docker compose when it is to be utilized in the process of working with AWS ECS service. 
+  
+  Also, the concept of using the container name as the hostname to pick it up by the docker automatically to build the communication between the conatiners in multi-container communications using docker cannot be replicated when using ECS. So, the domain/host name has to be replaced with environment variable so that a value in the local environment is kept in the .env file and a new variable key value can be configured when creating a cluster in the ECS service. 
