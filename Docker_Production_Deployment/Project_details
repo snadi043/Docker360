@@ -150,3 +150,36 @@ To avoid this warning, the project image is build again with specific platform f
     - The answer is when dealing with databases (database containers in ECS services), if your are taking the full control of the system you are responsible to make sure that the SCALING (making sure that the database is always available and able to handle loads of simultaneous requests),  PERFORMANCE (loadbalancing, efficient traffic handling) and at top most priority is security and backup.
     - All the explained situations can be easily handled or addressed with AWS RDS (Relational Database Service) which specially works with RDS databases (i,e MYSQL).
     - For MongoDB, there is MongoDB Atlas which takes care of problems which are discussed above.  
+
+<!-- CHALLENGES DURING THE INTEGRATION OF FRONTEND CODE IN A MULTI CONTAINER PROJECT WITH AWS ECS. -->
+
+    To the above, mentioned steps and the project, now let us try to integrate the frontend of the project to the exisitng ECS service in the remote AWS cloud infrastructure and also let us discuss about the challenges developers has to deal with while doing this particular integrations.
+      - Firstly, it is to be understood that the frontend projects which are developed (React, Angular or Vue) are not the same when working in developement and production modes.
+      - The reason, behind the above statement is, most of the modern frontend frameworks are meant to be interacting with the browser rather than to a server directly like any backend projects and to perform this task most of the modern JS based frameworks use the conept called JSX (JS and XML), this process is responsible for manipulating the JSX code into browser friendly DOM in the browsers.
+      - To achieve this manipulation of converting the code into browser friendly DOM, frontend projects use "scripts" in react it is "react-scripts" which take care of translating the code, optimizing the code and spinning the server to perform this manipulation of the frontend project. However, all these steps are by default developed to perform their work in "Development" mode of the application.
+      - The same steps like (code translation, optimiation and server spinning) doesnot happen with the remote servers in the cloud with the regular frontend "npm start" commands.
+                                              - npm start 
+                                                -> used in development mode.
+                                                -> takes care of translating the code, optimization and server spinnning.
+                                                -> this command is not helpful to make the frontend code compatibale for the production of the application.
+      - The alternative approach to make the frontend projects "production" ready is to use the "npm build" command.
+                                              - npm build
+                                                -> used for production mode.
+                                                -> provides the developers with more optimized and translated code.
+                                                -> this doesnot provide us with the server by itself.
+                                                -> So, during production the developers has to work on creating isolated server for the frontend uses.
+                                                -> If, the build steps are not configured for the deployment in "production" seperately, then we end up dealing with more larger project files, slow load process and higher latency in starting the server.
+      - So, the process of making the frontend projects ready for the "production" can be achieved by using the concept called "Multi-Stage" builds in Docker. The process involves creating a new dockerfile for production and configuring the "INSTRUCTION" to the requirements of frontend project "deployment" ready.
+      - The concept of "Multi-Stage" in docker is to use in creating the "build-only" container during the "production" stage of frontend applications.
+      - Important concepts in "Multi-Stage" regarding docker are
+            -> The dockerfile can be modified to run multiple sub-tasks which are refered as "Stages".
+            -> The output from one complete stage can be the entry point or input for the second stage in the dockerfile.
+            -> It is also possible to run, indivudal stages in the dockerfile or run the stages continuously till it is neccessary for the project.
+            -> It can also be configured to run all the stages synchronously from top to bottom.
+      - So, for the frontend projects, the usual dockerfile deals with "importing the node image from dockerhub" and creating and copying the files, exposing the host port and running the commands. But, these steps are configured to work in "development" mode. When it is be configured for "production" we have to use the "multi-stage" concepts of docker where 
+                    - "node" image is not necessary for proudction when there is a flexibility to use the result of what "node" iamge does with respect to frontend project.
+                    - The prupose of "node" image is to run the "start commands" which provides the result with optimized code and a translated code files.
+                    - With the help of docker "multi-stage" concept the result of "stage-1" which is "development" instructions in the project are utilized as a result to "stage-2" where there is node need to "import the node" again for "production". Also, the build commands are executed differently as [RUN npm run build] in "stage-1".
+                    - Also, as we know that "npm build" doesnot provide us with inbuilt server, we start the "stage-2" by "importing the server (nginx)" for the frontend purposes and then copy the results (optimized files from stage-1) into the "ngnix" static file repository to server the frontend code. And here, in "stage-2" we now expose the port "80" for "nginx" server  to server the files.        
+      - Once, the multi-stage dockerfile is created, it is important to refactor the frontend "enpoints" in the project because, the "localhost" refers to the communication happening between the project whic is up and running in the local machine and in the browser locally, but in the production the code is deployed else where remotely in the server and the "localhost" refers to the user's local machine which is not the case as it is running in a remote server. So, the changes has to be made accordingly.
+      - Before, pushing the code to ECS service, make sure that environment variables are set conditionally for "development" and "production" and configure in a away that both the containers listen to the same port with two different "load balancers" t ensure static IP address and hostnames.
