@@ -183,3 +183,30 @@ To avoid this warning, the project image is build again with specific platform f
                     - Also, as we know that "npm build" doesnot provide us with inbuilt server, we start the "stage-2" by "importing the server (nginx)" for the frontend purposes and then copy the results (optimized files from stage-1) into the "ngnix" static file repository to server the frontend code. And here, in "stage-2" we now expose the port "80" for "nginx" server  to server the files.        
       - Once, the multi-stage dockerfile is created, it is important to refactor the frontend "enpoints" in the project because, the "localhost" refers to the communication happening between the project whic is up and running in the local machine and in the browser locally, but in the production the code is deployed else where remotely in the server and the "localhost" refers to the user's local machine which is not the case as it is running in a remote server. So, the changes has to be made accordingly.
       - Before, pushing the code to ECS service, make sure that environment variables are set conditionally for "development" and "production" and configure in a away that both the containers listen to the same port with two different "load balancers" t ensure static IP address and hostnames.
+  
+  <!-- KUBERNETES -->
+
+    - Kubernetes is a open source system or a framework in a way which mainly concentrates on automating the process of availability,scaling, traffic balancing and optimizing the containerized applications in synchronous with any cloud infrastrucutre providers (AWS, AZURE, GOOGLE CLOUD).
+    - This is really helpful in cases where the application is limited with deploying it manually using EC2 service with amazon or any similar service in any other cloud infrastructure provider because the containers can crash anytime for any reason and we as the devlopers cannot monitor the containers 24/7.
+    - The above mentioned specifications / issues are handled in AWS with the helf of automatic assiging of more contatiners by checking the health of the containers in AWS EC2, automatic assigning of containers and removing them based on the incoming traffic and using the conept of loadbalancing to persist a static IP address and manage the traffic equally among all the available containers.
+    - Also, with AWS it is a great option where any application can be integrated with the concept of "MANAGED SERVICES", where the above mentioned advantages of using KUBERNETES are addressed but still there are certain downsides of it.
+    - The downside involved in maintaining the applications even with "MANAGED SERVICE" is looking the application in one cloud infrastructure provider which means let's say an application is deployed in AWS ECS then that application is looked with only that specific infrastructre becasue the application is configured as per the rules and guidelines provided by the AWS systems to deploy the application in cloud.
+  
+  <!-- KUBERNETES ARCHITECTURE -->
+
+    - This section explains about the important concepts and architecture of kubernetes and how the internal components in kubernetes work together to achieve the features of kubernetes.
+    - In a big picture kubernetes architecture can be defined as "THE COMMUNICATION BETWEEN THE CLUSTER IN KUBERNETES WITH ANY CLOUD INFRASTRUCUTRE PROVIDER."
+    - The components of cluster in kubernetes are explained in detail below.
+        - POD (A Pod is basically the smallest building block in a kuberenetes system which can be compared to a conatiner in AWS ECS. A Pod can manage a single container or also able to handle multiple containers. The pod is managed by a component called "WORKER NODE".)
+        - PROXY (A Proxy is basically a system which handles all the configurations regarding the networking and communication in between the pods and how these pods should reach the worker nodes to make the application available all the times.) 
+              - KUBELET (A process which is responsible for configuring the relation between worker node and the master node).
+              - KUBE-PROXY (A system that manages the communication in between the pods and the worker node.)
+        - WORKER NODE (A Worker Node is a layer/component surrounding the pod which can be represented as a remote server (which has certain amount of CPU, OS, Storage etc) in AWS ECS service. The worker node handles all the functionalities of the PODS and PROXY interanally, which can be refered to as a small cluster by itself).
+        - MASTER NODE (A Master Node is the parent node or so called control plane which works in conjuction with all the assigned worker nodes, makes them available and handles their functionality all the time. If a single worker node is down or failed the master node takes care of handling the situation to make it restart or assign a new worker node.)
+              - API SERVER - works with kubelet to manage the communication with the cloud service provider with worker nodes and the pods.
+              - SCHEDULER - checks and manages the pods and their health, status checks and regulates them in sync with worker nodes.
+              - KUBE CONTROLLER MANAGER - Watches the worker nodes, controls them and verify the number of worker nodes running.
+              - CLOUD CONTROLLER MANAGER - It is similar to kube controller manager, but confined to cloud service provider. 
+        - All the above mentioned components create a KUBERNETES CLUSTER (WORKER NODE (PODS, PROXY) & MASTER NODE).
+        - To this cluster the cloud infrastructure is integrated with specific API to configure the KUBERNETES ARCHITECUTRE with the SERVICES to be created in the cloud infrastructure provider.
+        - KUBERNETES achieve the feature of configuring the cluster to any cloud service provider with KUBERNETES configuration file which is scalable which means a single file can be integrated with multiple cloud service providers. 
