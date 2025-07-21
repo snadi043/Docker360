@@ -1,198 +1,13 @@
-<!-- PROJECT SUMMARY -->
-
-This project main focus will be on how an application which is created and developed locally on the developers local machine (environment) is configured to deploy in cloud and host the web application to the users. The complete details, architecture flow and tech stack are described below.
-
-<!-- Tech Stack  -->
-
-    - Node JS framework
-    - Docker
-    - Dockerhub
-    - AWS EC2 
-    - AWS ECS
-    - AWS ELB
-    - AWS EFS
-    - SSH Configuration 
-    - Github
-    - REST API
-    - MONGODB ATLAS
-   
-<!-- ARCHITECTURE FLOW  -->
-
-The main application which is basically a NODE based normal application which has REST API's and endpoints to build the communication in between the backend code and the local node server which handle CRUD operations using HTTP methods like GET,POST,UPDATE and DELETE.
-
-To make all the version changes and code commits this project is integrated with GITHUB and the repository for the application is 
-https://github.com/snadi043/Docker360.git
-
-Also, to make this project easy to ship and make it able to run in the same way in all environments, it is build and integrated with Containerization Tool which is DOCKER and the image and container details are defined below.
-    Docker image : docker-prod-container-cloud-deployment
-    Docker container: docker-prod-cloud-deploy
-
-Once, all the above steps are done, the application is then deployed in AWS cloud platform using EC2 service to configure the app with all the security, access control and hosting.
-    Detailed Steps include:
-        - Configuring an AWS EC2 Instance with all the specifications dealing with (OS, RAM, STORAGE, NETWORKING etc.)
-        - Configuring the proper access to make sure who can use the application, in a way to control the traffic and implement a layer of security to the application.
-        -  Launching the instance.
-
-Finally, after the application is integrated with docker and the final image is locked, the application is then deployed into the above created AWS EC2 instance to host in the cloud using SSH (Secure Shell) and then install DOCKER in the EC2 Instance and run the image in that instance. The commands and the setup for the instance and the shell connection are defined below.
-    - Instance ID - i-0b5f4225781edcef5 (node-app-cloud-deploy)
-    - Open an SSH client. (For Linux and MacOS it is already enabled in the sytem).
-    - Place the private key file generated when creating the instance in root directory of the project.
-    - Run this command, if necessary, to ensure your key is not publicly viewable.
-            chmod 400 "permission file name"
-    - Connect to your instance using its Public DNS:
-            ec2-3-147-79-144.us-east-2.compute.amazonaws.com
-
-Example:
-ssh -i "node-app-cloud-deploy.pem" ec2-user@ec2-3-147-79-144.us-east-2.compute.amazonaws.com
-
-Installing the Docker application in the remote machine which is on above created AWS EC2 instance.
-The steps to follow to install the docker remotely is as follows.
-    - sudo yum update -y
-    - sudo yum -y install docker
-    - sudo service docker start
-    - sudo usermod -a -G docker ec2-user
-    # Make sure to log out + back in after running these commands.
-    - sudo systemctl enable docker
-    - docker version
-After running the docker version command it has to display all the docker information installed in the remote istance.
-
-Deploying the source code from the local machine into the remote machine which is the AWS EC2 instance created in the above steps.
-- This process can be done in two steps
-  1. Migrating the source code directly from the local machine to remote machine and then building an image and run the conatainer in the remote machine using the docker application which is installed previously with SSH commands.
-  2. Building the docker image and the container in the local machine and then migrating the source code through the already build docker image to the dockerhub by creating a repository in the dockerhub and then running that image in our remote machine. (AWS EC2 instance).
-- When using the step-1, there are lot of configurations and steps the developer has to deal with, which is cumbersome.
-- So, the best and most optimized solution is to follow step-2.
-
-Steps and Procedure involved while deploying the source code from local machine into the remote remote machine based on procedure explained in line 56.
-    - Signing to your dockerhub account.
-    - Create a new repository with the matchable project name.
-    - Build an image in your local machine and then assign a tag to that image which matches the remote dockerhub project name.
-    - Create a connection from the local docker terminal to dockerhub in the browser with username/password or code confirmation mechanism
-    - Build a new image of the up to date source code and then attach a tag with the dockerhub repository name. 
-    - Then, Push the image to the dockerhub with the displayed docker push command in the dockerhub.
-            In this project it is as follows
-            docker push snadi043/node-app-cloud-deploy:dockerhub
-
-<!-- BOTTLENECKS IN THE PROJECT -->
-
-While working with this project and in the process of launching the source code from the local machine to remote EC2 instance with dockerhub repository an issue was arised which is like a conflict in between the platform / OS in which dockerhub image is build and where this image is being used in the remote EC2 service which is platform / OS of remote AWS EC2 instance. The detailed "WARNINIG" is attached below.
-        WARNING: image with reference snadi043/node-app-cloud-deploy:dockerhub was found but its platform (linux/arm64) does not match the specified platform (linux/amd64) docker.io/snadi043/node-app-cloud-deploy:dockerhub
-
-To avoid this warning, the project image is build again with specific platform flag and the steps, commands are as follows: 
-    - First checking the local machine OS and Platform specifications to match it with docker image OS and platform
-    - In this case, it is apple m1 chip which is arm based, so a docker image with arm specifications has to be build.
   
-    
-    - Docker is installed in the remote AWS instance from within local machine and in the details of the installation, it is clearly shown that the details of docker application installed in AWS EC2 instance are as follows:
-      - Client:
-      Version:           25.0.8
-      API version:       1.44
-      Go version:        go1.24.2
-      Git commit:        0bab007
-      Built:             Thu May  8 00:00:00 2025
-      OS/Arch:           linux/amd64
-      Context:           default
-  
-    -   To build multi platform images in docker using the docker desktop or docker application itself there are two main procedures.
-    -   The links below helps to create multi-platform docker images.
-                https://docs.docker.com/build/building/multi-platform/
-  
-                https://forums.docker.com/t/docker-getting-started-tutorial-docker-no-matching-manifest-for-linux-amd64-in-the-manifest-list-entries/147304
+                                                  <!-- KUBERNETES -->
 
-    - Once a source is shipped from the local machine to dockerhub to then into remote AWS EC2 instance, we can still update the changes in the source code by just building a new image to the same dockerhub and then pushing that updated image into same remote AWS EC2 instance that was previously created.
-  
-<!-- STEP TO ACCESS THE LOGS IN AWS EC2  -->
-
-    Directly on the EC2 Instance:
-        - Connect to the EC2 instance via SSH or other preferred method. 
-        - Navigate to the /var/log/ directory. 
-        - The /var/log/eb-engine.log file will be present. 
-        - You can then view the file content using cat, less, or other command-line tools. 
-
-
-                                            AWS Elastic Container Service (ECS)
-
-  So far, all the details mentioned above is in a way can be called as (DIY) Do It Yourself process of end-to-end setup of an applicaiton using available infrastructure to host the web application into a domanin in AWS EC2 service to then can be accessed by the users.
-    - This process is good and interesting to know th flow of the application development, building and launching but the difficult part here is not all the developer are keen/interested to explore and invest to know everything that is needed to make the application up and running for various reasons.
-    - So, in such cases there is an alternative to replace the whole of environment/infrastrucutre setup in AWS which is by using AWS service called ECS (Elastic Container Service).
-    - ECS -> It is one of the AWS Services mainly fousing on automating the remote servers in accordance with the source code image from the docker and keeps the application secure, scalable, optimized and traffic efficient and all of these functionalities are managed my AWS for us. So, in a way this process can be refered to as "MANAGED SERVICES".
-    - There are mainly 4 important concepts within Elastic Container Service which are as follows.
-                - Containers 
-                - Tasks
-                - Clusters
-                - Services  
-    - Also, this service is not free to use and the prices are based on the number of instances you configure to host. Other infrastructre pricing (storage, networking, servers etc). 
-  
-  Also, to emphasize on docker compose, the purpose of docker compose suites well in the projects which are scoped to run locally in the local machine where there is only single server is in communication and it is static all the time, but whereas in the case of launching an application using AWS there is no gaurantee that the same server is assigned all the time for the application to host it. So, everytime you make changes and push the image and run the containers in the cluster in the ECS service the server, public IP address changes. But, to execute multi-container commmunication, the same approach of making all the containers in the network talk to each other can be achieved by placing all the clusters in the ECS under a single task. However, the problem with assiginig the same server all the time is something which cannot be solved. Also, in addition to that, in the docker compose there is no flexibility to deal / configure the infrastructure specifications like (CPU, Storage, Mermory, Networks, OS etc) but in the process of deploying the application remotely in AWS all these additional information is neccessary and important. These are the limitations for the docker compose when it is to be utilized in the process of working with AWS ECS service. 
-  
-  Also, the concept of using the container name as the hostname to pick it up by the docker automatically to build the communication between the conatiners in multi-container communications using docker cannot be replicated when using ECS. So, the domain/host name has to be replaced with environment variable so that a value in the local environment is kept in the .env file and a new variable key value can be configured when creating a cluster in the ECS service. 
-
-  In the above explained scenario, where any changes are pushed into the ECS service and launched the containers again, the public IP address changes. This situation can be addressed with the help of load balancers in offical terms refered as ELASTIC LOAD BALANCING (ELB).
-  The purpose of load balancers is to navigate the incoming traffic to the application instance to all the avalilable servers assigned to the application equally so that none of the individual servers is forced to address heavy traffic. Also, with the help of load balancers we can assure that the pubic IP address is made static even though the changes are made to the containers in the ECS service. However, in AWS there are specific load balancers to specific functionalities. The major Load Balancer types are defined as follows.
-            -   Application Load Balancer (ALB)
-            -   Network Load Balancer (NLB)
-            -   Gateway Load Balancer (GWLB)
-            -   Classic Load Balancer (CLB)
-  
-                                                EFS (Elastic File System)
-  EFS is the AWS service which is very helpful to deal with database storage in the AWS cloud environment which is the remote hardwares which takes care of keeping data persistant even if containers are removed.
-  Basically, when the ECS service is deployed and whenever the changes are pushed to the exisitng containers in the ECS, the data which is present in the container is lost and doesnot persist in the container. To overcome this situation in docker we have the concept of "VOLUMES". Similarly in the AWS cloud environment when working with ECS, we can also integrate the container with EFS (Elastic File System) to make sure the data persists even when the changes are pushed to the same contaianer.
-
-  To configure the EFS service with the ECS service and make both of them working in sync without any issues, a new security group has to be created for the EFS service and sync it with the container which depends upon the need of data persistency (generally the database container).
-
-  However, when doing these confiurations, if we try to create a new change and push it to the existing container and reinitiate the task in the cluster, we might face a problem which is "rolling deployments" in the ECS service.
-    - Firstly "Rolling Deployment" is the strategy which performs the replacement/reinstallation of the instance in the cloud service without stopping/deleting the existing instance in the cloud service to avoid downtime and availability of the application to the users.
-    - So, the problem during this situation with respect to the EFS service is that whenever a new change is pushed, the existing instance and the newly being created instance will be trying to communicate with the same database container to rewrite the same file within the EFS service.  
-  
-  Also, to mention managing the containers for the databases by our own is not all the times vialbe unless you really know what you are actually doing and expert in whole pipeline and architecture flow. So, basically it is a tradeoff between "CONTROL" (application compeletely under your control) to "RESPONSIBILITY" (configuring database cloud service to take the responsibility).
-  In addition, lot of times you end up questing about why it is good to source cloud database services for the application in production.
-
-    - The answer is when dealing with databases (database containers in ECS services), if your are taking the full control of the system you are responsible to make sure that the SCALING (making sure that the database is always available and able to handle loads of simultaneous requests),  PERFORMANCE (loadbalancing, efficient traffic handling) and at top most priority is security and backup.
-    - All the explained situations can be easily handled or addressed with AWS RDS (Relational Database Service) which specially works with RDS databases (i,e MYSQL).
-    - For MongoDB, there is MongoDB Atlas which takes care of problems which are discussed above.  
-
-<!-- CHALLENGES DURING THE INTEGRATION OF FRONTEND CODE IN A MULTI CONTAINER PROJECT WITH AWS ECS. -->
-
-    To the above, mentioned steps and the project, now let us try to integrate the frontend of the project to the exisitng ECS service in the remote AWS cloud infrastructure and also let us discuss about the challenges developers has to deal with while doing this particular integrations.
-      - Firstly, it is to be understood that the frontend projects which are developed (React, Angular or Vue) are not the same when working in developement and production modes.
-      - The reason, behind the above statement is, most of the modern frontend frameworks are meant to be interacting with the browser rather than to a server directly like any backend projects and to perform this task most of the modern JS based frameworks use the conept called JSX (JS and XML), this process is responsible for manipulating the JSX code into browser friendly DOM in the browsers.
-      - To achieve this manipulation of converting the code into browser friendly DOM, frontend projects use "scripts" in react it is "react-scripts" which take care of translating the code, optimizing the code and spinning the server to perform this manipulation of the frontend project. However, all these steps are by default developed to perform their work in "Development" mode of the application.
-      - The same steps like (code translation, optimiation and server spinning) doesnot happen with the remote servers in the cloud with the regular frontend "npm start" commands.
-                                              - npm start 
-                                                -> used in development mode.
-                                                -> takes care of translating the code, optimization and server spinnning.
-                                                -> this command is not helpful to make the frontend code compatibale for the production of the application.
-      - The alternative approach to make the frontend projects "production" ready is to use the "npm build" command.
-                                              - npm build
-                                                -> used for production mode.
-                                                -> provides the developers with more optimized and translated code.
-                                                -> this doesnot provide us with the server by itself.
-                                                -> So, during production the developers has to work on creating isolated server for the frontend uses.
-                                                -> If, the build steps are not configured for the deployment in "production" seperately, then we end up dealing with more larger project files, slow load process and higher latency in starting the server.
-      - So, the process of making the frontend projects ready for the "production" can be achieved by using the concept called "Multi-Stage" builds in Docker. The process involves creating a new dockerfile for production and configuring the "INSTRUCTION" to the requirements of frontend project "deployment" ready.
-      - The concept of "Multi-Stage" in docker is to use in creating the "build-only" container during the "production" stage of frontend applications.
-      - Important concepts in "Multi-Stage" regarding docker are
-            -> The dockerfile can be modified to run multiple sub-tasks which are refered as "Stages".
-            -> The output from one complete stage can be the entry point or input for the second stage in the dockerfile.
-            -> It is also possible to run, indivudal stages in the dockerfile or run the stages continuously till it is neccessary for the project.
-            -> It can also be configured to run all the stages synchronously from top to bottom.
-      - So, for the frontend projects, the usual dockerfile deals with "importing the node image from dockerhub" and creating and copying the files, exposing the host port and running the commands. But, these steps are configured to work in "development" mode. When it is be configured for "production" we have to use the "multi-stage" concepts of docker where 
-                    - "node" image is not necessary for proudction when there is a flexibility to use the result of what "node" iamge does with respect to frontend project.
-                    - The prupose of "node" image is to run the "start commands" which provides the result with optimized code and a translated code files.
-                    - With the help of docker "multi-stage" concept the result of "stage-1" which is "development" instructions in the project are utilized as a result to "stage-2" where there is node need to "import the node" again for "production". Also, the build commands are executed differently as [RUN npm run build] in "stage-1".
-                    - Also, as we know that "npm build" doesnot provide us with inbuilt server, we start the "stage-2" by "importing the server (nginx)" for the frontend purposes and then copy the results (optimized files from stage-1) into the "ngnix" static file repository to server the frontend code. And here, in "stage-2" we now expose the port "80" for "nginx" server  to server the files.        
-      - Once, the multi-stage dockerfile is created, it is important to refactor the frontend "enpoints" in the project because, the "localhost" refers to the communication happening between the project whic is up and running in the local machine and in the browser locally, but in the production the code is deployed else where remotely in the server and the "localhost" refers to the user's local machine which is not the case as it is running in a remote server. So, the changes has to be made accordingly.
-      - Before, pushing the code to ECS service, make sure that environment variables are set conditionally for "development" and "production" and configure in a away that both the containers listen to the same port with two different "load balancers" t ensure static IP address and hostnames.
-  
-  <!-- KUBERNETES -->
-
-    - Kubernetes is a open source system or a framework in a way which mainly concentrates on automating the process of availability,scaling, traffic balancing and optimizing the containerized applications in synchronous with any cloud infrastrucutre providers (AWS, AZURE, GOOGLE CLOUD).
+    - Kubernetes is a open source system or a framework in a way which mainly concentrates on automating the process of availability, scaling, traffic balancing and optimizing the containerized applications in synchronous with any cloud infrastrucutre providers (AWS, AZURE, GOOGLE CLOUD).
     - This is really helpful in cases where the application is limited with deploying it manually using EC2 service with amazon or any similar service in any other cloud infrastructure provider because the containers can crash anytime for any reason and we as the devlopers cannot monitor the containers 24/7.
     - The above mentioned specifications / issues are handled in AWS with the helf of automatic assiging of more contatiners by checking the health of the containers in AWS EC2, automatic assigning of containers and removing them based on the incoming traffic and using the conept of loadbalancing to persist a static IP address and manage the traffic equally among all the available containers.
     - Also, with AWS it is a great option where any application can be integrated with the concept of "MANAGED SERVICES", where the above mentioned advantages of using KUBERNETES are addressed but still there are certain downsides of it.
-    - The downside involved in maintaining the applications even with "MANAGED SERVICE" is looking the application in one cloud infrastructure provider which means let's say an application is deployed in AWS ECS then that application is looked with only that specific infrastructre becasue the application is configured as per the rules and guidelines provided by the AWS systems to deploy the application in cloud.
+    - The downside involved in maintaining the applications even with "MANAGED SERVICE" is locking the application in one cloud infrastructure provider which means let's say an application is deployed in AWS ECS then that application is locked with only that specific infrastructre becasue the application is configured as per the rules and guidelines provided by the AWS systems to deploy the application in cloud.
   
-  <!-- KUBERNETES ARCHITECTURE -->
+                                                <!-- KUBERNETES ARCHITECTURE -->
 
     - This section explains about the important concepts and architecture of kubernetes and how the internal components in kubernetes work together to achieve the features of kubernetes.
     - In a big picture kubernetes architecture can be defined as "THE COMMUNICATION BETWEEN THE CLUSTER IN KUBERNETES WITH ANY CLOUD INFRASTRUCUTRE PROVIDER."
@@ -202,7 +17,7 @@ To avoid this warning, the project image is build again with specific platform f
               - KUBELET (A process which is responsible for configuring the relation between worker node and the master node).
               - KUBE-PROXY (A system that manages the communication in between the pods and the worker node.)
         - WORKER NODE (A Worker Node is a layer/component surrounding the pod which can be represented as a remote server (which has certain amount of CPU, OS, Storage etc) in AWS ECS service. The worker node handles all the functionalities of the PODS and PROXY interanally, which can be refered to as a small cluster by itself).
-        - MASTER NODE (A Master Node is the parent node or so called control plane which works in conjuction with all the assigned worker nodes, makes them available and handles their functionality all the time. If a single worker node is down or failed the master node takes care of handling the situation to make it restart or assign a new worker node.)
+        - MASTER NODE (A Master Node is the parent node or so called control plane which works in conjuction with all the assigned worker nodes, makes them available and handles their functionality all the time. If a single worker node is down or failed the master node takes care of handling the situation to make it restart or assign a new worker node. A master node is in reality can be deployed in multiple machines so it is always up and running, but usually it is managed only in one machine to keep is simple.)
               - API SERVER - works with kubelet to manage the communication with the cloud service provider with worker nodes and the pods.
               - SCHEDULER - checks and manages the pods and their health, status checks and regulates them in sync with worker nodes.
               - KUBE CONTROLLER MANAGER - Watches the worker nodes, controls them and verify the number of worker nodes running.
@@ -210,3 +25,28 @@ To avoid this warning, the project image is build again with specific platform f
         - All the above mentioned components create a KUBERNETES CLUSTER (WORKER NODE (PODS, PROXY) & MASTER NODE).
         - To this cluster the cloud infrastructure is integrated with specific API to configure the KUBERNETES ARCHITECUTRE with the SERVICES to be created in the cloud infrastructure provider.
         - KUBERNETES achieve the feature of configuring the cluster to any cloud service provider with KUBERNETES configuration file which is scalable which means a single file can be integrated with multiple cloud service providers. 
+  
+    - There are tools available to make the steps easy regarding what kubernetes dont do in general. So, basically these tools will take care of creation of clusters (Worker nodes and Master node), creation of load balancers, File systems related to the worker node pods etc. Some of the famous tools useful to create managed kubernetes works are 
+            - Kubermatic
+            - AWS EKS (Elastic Kubernetes Service) 
+                 - As we know that kubernetes is an open source framework / system helpful to manage the cloud baesd containerized application in terms of availability, scaling and traffic control, AWS EKS is a defined as "AMAZON ELASTIC KUBERNETES SERVICE", which is basically the whole kubernetes system which is provided by the "AMAZON AWS CLOUD". This service is compatible not just for AWS cloud infrastructure but for other cloud providers as well. 
+   
+                                                <!-- INSTALLATIONS TO BE DONE TO WORK WITH KUBERNETES. -->
+          - CLUSTER (Worker node, Master node)
+          - KUBECTL - (KUBECTL, Kubernetes command line tool also refered as kubecontrol instructs the cluster, so that the master node takes the instructions and manages the worker nodes to perform the actions accordingly as per the instructions.). KUBECTL can instruct the clusters which are present in your local machine or in the remote machines.
+                                                <!-- COMMANDS TO INSTALL KUBECTL IN MACOS MACHINE -->
+          
+          - In this machine, kubectl is installed using homebrew package.
+                        - brew install kubectl
+                        - kubectl version --client 
+
+          - MINIKUBE This is a setup in the local machine which creates a cluster in your local machine and communicates to that cluster to make the installations.
+                        - curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-darwin-arm64 
+                        - sudo install minikube-darwin-arm64 /usr/local/bin/minikube
+                        - minikube start
+                                          
+                                          Driver installation commands
+          - In this machine the minikube driver compatabile to run with kubectl is configured with docker. The commands to setup the docker configured with minikube are as follows.
+                                          
+                        - minikube start --driver=docker 
+                        - minikube config set driver docker
