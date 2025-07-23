@@ -50,3 +50,18 @@
                                           
                         - minikube start --driver=docker 
                         - minikube config set driver docker
+
+      - Kubernetes communicates through the concept called "OBJECTS". 
+      - Objects are basically the key blocks in the kubernetes which perform certain jobs assgined to them.
+      - Some of the OBJECTS in kuberenetes are PODS, DEPLOYMENT, CONTAINERS, SERVICES, VOLUMES, PROXY etc..
+      - So kubernetes gets into action by understanding the objects which are written either as commands (KUBECTL) or in a file so that it instructs the working nodes and internally pods to perform the actions.
+      - The commands can be given to the kubernetes either imperatively or declaratively.
+      - Let us start with the PODS, considering them as OBJECT and as we know PODS are the smallest building block in Kubernetes cluster.
+      - These pods are not persistant, which means they dont store anything once they are removed are stopped.
+      
+                                                DEPLOYMENT OBJECT
+
+      - Deployment Object is one of the key objects in Kubernetes which in behind the scenes acts as an application cluster deployment controller, because we are not manaully creating any pods or containers in kuberenetes.
+      - These are automatically created by kubernetes by working with "DEPLOYMENT" object.
+      - In this deployment object it is our job to define how many pods has to be assigned and all other features are taken care of kuberenetes like how to scale the pods, how to turn on/off the pods, start,reset pods etc.
+      - Also, using the "DEPLOYMENT" Oject we can configure to rollback the pods in case of any wrong deployments take place in the process.    
