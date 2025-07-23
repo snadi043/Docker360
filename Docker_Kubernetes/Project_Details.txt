@@ -1,0 +1,185 @@
+  
+                                                    <!-- KUBERNETES -->
+
+    - Kubernetes is a open source system or a framework in a way which mainly concentrates on automating the process of availability, scaling, traffic balancing and optimizing the containerized applications in synchronous with any cloud infrastrucutre providers (AWS, AZURE, GOOGLE CLOUD).
+    - This is really helpful in cases where the application is limited with deploying it manually using EC2 service with amazon or any similar service in any other cloud infrastructure provider because the containers can crash anytime for any reason and we as the devlopers cannot monitor the containers 24/7.
+    - The above mentioned specifications / issues are handled in AWS with the helf of automatic assiging of more contatiners by checking the health of the containers in AWS EC2, automatic assigning of containers and removing them based on the incoming traffic and using the conept of loadbalancing to persist a static IP address and manage the traffic equally among all the available containers.
+    - Also, with AWS it is a great option where any application can be integrated with the concept of "MANAGED SERVICES", where the above mentioned advantages of using KUBERNETES are addressed but still there are certain downsides of it.
+    - The downside involved in maintaining the applications even with "MANAGED SERVICE" is locking the application in one cloud infrastructure provider which means let's say an application is deployed in AWS ECS then that application is locked with only that specific infrastructre becasue the application is configured as per the rules and guidelines provided by the AWS systems to deploy the application in cloud.
+  
+                                                    <!-- KUBERNETES ARCHITECTURE -->
+
+    - This section explains about the important concepts and architecture of kubernetes and how the internal components in kubernetes work together to achieve the features of kubernetes.
+    - In a big picture kubernetes architecture can be defined as "THE COMMUNICATION BETWEEN THE CLUSTER IN KUBERNETES WITH ANY CLOUD INFRASTRUCUTRE PROVIDER."
+    - The components of cluster in kubernetes are explained in detail below.
+        - POD (A Pod is basically the smallest building block in a kuberenetes system which can be compared to a conatiner in AWS ECS. A Pod can manage a single container or also able to handle multiple containers. The pod is managed by a component called "WORKER NODE".)
+        - PROXY (A Proxy is basically a system which handles all the configurations regarding the networking and communication in between the pods and how these pods should reach the worker nodes to make the application available all the times.) 
+              - KUBELET (A process which is responsible for configuring the relation between worker node and the master node).
+              - KUBE-PROXY (A system that manages the communication in between the pods and the worker node.)
+        - WORKER NODE (A Worker Node is a layer/component surrounding the pod which can be represented as a remote server (which has certain amount of CPU, OS, Storage etc) in AWS ECS service. The worker node handles all the functionalities of the PODS and PROXY interanally, which can be refered to as a small cluster by itself).
+        - MASTER NODE (A Master Node is the parent node or so called control plane which works in conjuction with all the assigned worker nodes, makes them available and handles their functionality all the time. If a single worker node is down or failed the master node takes care of handling the situation to make it restart or assign a new worker node. A master node is in reality can be deployed in multiple machines so it is always up and running, but usually it is managed only in one machine to keep is simple.)
+              - API SERVER - works with kubelet to manage the communication with the cloud service provider with worker nodes and the pods.
+              - SCHEDULER - checks and manages the pods and their health, status checks and regulates them in sync with worker nodes.
+              - KUBE CONTROLLER MANAGER - Watches the worker nodes, controls them and verify the number of worker nodes running.
+              - CLOUD CONTROLLER MANAGER - It is similar to kube controller manager, but confined to cloud service provider. 
+        - All the above mentioned components create a KUBERNETES CLUSTER (WORKER NODE (PODS, PROXY) & MASTER NODE).
+        - To this cluster the cloud infrastructure is integrated with specific API to configure the KUBERNETES ARCHITECUTRE with the SERVICES to be created in the cloud infrastructure provider.
+        - KUBERNETES achieve the feature of configuring the cluster to any cloud service provider with KUBERNETES configuration file which is scalable which means a single file can be integrated with multiple cloud service providers. 
+  
+    - There are tools available to make the steps easy regarding what kubernetes dont do in general. So, basically these tools will take care of creation of clusters (Worker nodes and Master node), creation of load balancers, File systems related to the worker node pods etc. Some of the famous tools useful to create managed kubernetes works are 
+            - Kubermatic
+            - AWS EKS (Elastic Kubernetes Service) 
+                 - As we know that kubernetes is an open source framework / system helpful to manage the cloud baesd containerized application in terms of availability, scaling and traffic control, AWS EKS is a defined as "AMAZON ELASTIC KUBERNETES SERVICE", which is basically the whole kubernetes system which is provided by the "AMAZON AWS CLOUD". This service is compatible not just for AWS cloud infrastructure but for other cloud providers as well. 
+   
+                                                    <!-- INSTALLATIONS TO BE DONE TO WORK WITH KUBERNETES. -->
+          - CLUSTER (Worker node, Master node)
+          - KUBECTL - (KUBECTL, Kubernetes command line tool also refered as kubecontrol instructs the cluster, so that the master node takes the instructions and manages the worker nodes to perform the actions accordingly as per the instructions.). KUBECTL can instruct the clusters which are present in your local machine or in the remote machines.
+                                                <!-- COMMANDS TO INSTALL KUBECTL IN MACOS MACHINE -->
+          
+          - In this machine, kubectl is installed using homebrew package.
+                        - brew install kubectl
+                        - kubectl version --client 
+
+          - MINIKUBE This is a setup in the local machine which creates a cluster in your local machine and communicates to that cluster to make the installations.
+                        - curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-darwin-arm64 
+                        - sudo install minikube-darwin-arm64 /usr/local/bin/minikube
+                        - minikube start
+                                          
+                                          Driver installation commands
+          - In this machine the minikube driver compatabile to run with kubectl is configured with docker. The commands to setup the docker configured with minikube are as follows.
+                                          
+                        - minikube start --driver=docker 
+                        - minikube config set driver docker
+
+      - Kubernetes communicates through the concept called "OBJECTS". 
+      - Objects are basically the key blocks in the kubernetes which perform certain jobs assgined to them.
+      - Some of the OBJECTS in kuberenetes are PODS, DEPLOYMENT, CONTAINERS, SERVICES, VOLUMES, PROXY etc..
+      - So kubernetes gets into action by understanding the objects which are written either as commands (KUBECTL) or in a file so that it instructs the working nodes and internally pods to perform the actions.
+      - The commands can be given to the kubernetes either imperatively or declaratively.
+      - Let us start with the PODS, considering them as OBJECT and as we know PODS are the smallest building block in Kubernetes cluster.
+      - These pods are not persistant, which means they dont store anything once they are removed are stopped.
+      
+                                                    DEPLOYMENT OBJECT
+
+      - Deployment Object is one of the key objects in Kubernetes which in behind the scenes acts as an application cluster deployment controller, because we are not manaully creating any pods or containers in kuberenetes.
+      - These are automatically created by kubernetes by working with "DEPLOYMENT" object.
+      - In this deployment object it is our job to define how many pods has to be assigned and all other features are taken care of kuberenetes like how to scale the pods, how to turn on/off the pods, start,reset pods etc.
+      - Also, using the "DEPLOYMENT" Oject we can configure to rollback the pods in case of any wrong deployments take place in the process.    
+
+
+                                        STEPS TO CONFIGURE KUBERNETES TO DEPLOY AN APPLICATION
+
+    - This section explains the details about the process to be followed to implement in an application to configure with Kubernetes in order to deploy an application with all the features of kubernetes involved.
+    - Firstly, it is important to keep in mind that kubernetes works with containers(present inside the pods) in the cluster and to work with containers, the basic foundation is to create an image.
+    - To create an image, it is important to work with DOCKER. So, the main emphasis here is DOCKER and KUBERNETES has to work hand-in-hand to achieve the best results in this deployment process.
+    - So using DOCKER we have to build an image first, for which we have to create a DOCKERFILE, where the instructions for creating the image which holds the application is defined. 
+    - In this project, a DOCKERFILE is created and using that file a simple node application is handled in this project.
+                                            COMMAND TO BUILD DOCKER IMAGE
+
+                                            docker build -t <image-name> .
+
+    - Once, the image is build, then now it is time to concentrate on minikube. As it is defined previously, minikube is an application which helps the developers to create a kuberenetes cluster locally in their systems.
+    - Make sure, the package for the minikube with all proper requirements and pre-requisites are installed and confirm it is up and running.
+    - Also, to stress on this project is configured with minikube which is then integrated with DOCKER driver to perform the actions.
+    - So, since the minikube is configured with docker for this project, it is always necessary to keep the docker destop application running in the local machine to avoid errors with minikube.
+    - Once, minikube is properly installed and docker destop app is running locally then try using the command - "minikube start". The command should shows the following response.
+                        😄  minikube v1.36.0 on Darwin 14.1.1 (arm64)
+                        ✨  Using the docker driver based on user configuration
+                        📌  Using Docker Desktop driver with root privileges
+                        👍  Starting "minikube" primary control-plane node in "minikube" cluster
+                        🚜  Pulling base image v0.0.47 ...
+                        🔥  Creating docker container (CPUs=2, Memory=2200MB) ...
+                        🐳  Preparing Kubernetes v1.33.1 on Docker 28.1.1 ...
+                            ▪ Generating certificates and keys ...
+                            ▪ Booting up control plane ...
+                            ▪ Configuring RBAC rules ...
+                        🔗  Configuring bridge CNI (Container Networking Interface) ...
+                        🔎  Verifying Kubernetes components...
+                            ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+                        🌟  Enabled addons: default-storageclass, storage-provisioner
+                        🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+    - So, the above result steps garuntees that minikube is running without any issues in the local environment.
+    - Once, minikube is all set in the local environment, it takes of care of making the use of kubectl work in the local environment without any issues.
+    - So, at this step if you type "kubectl" in your terminal it should display all the kubectl commands to work with, which represents that kubectl is all set to work with locally.
+    - Now, the important task for us is to "deploy" the application with kubernetes.
+    - For that, the command helpful is "create" from kubectl commands. If you type kubectl create --help it displays the details about how to create a "deployment" object.
+
+    - Now, coming back to the docker image, the node app is created in app.js file which now has to be build with the build command written in the above section.
+    - Once, the image is build locally and then when this locally build image is managed to deploy in the kubernetes cluster with kubectl command as follows
+
+                                    kubectl create deployment <kubernetes-cluster-name> --image=<locally-build-docker-image-name>
+
+    - Now, when the above command is used based on locally build docker image, kuberenetes throws an error, stating that the image cannot be identified.
+    - Because, kuberenetes expects the image from the remote location which is in this case, has to be from dockerhub repository.
+    - So, to avoid the issue with kubernetes related to docker images, it is the best practise to first create a dockerhub repository for this project which in this case named as
+        kubernetes-node-application.
+    - Once, the repository is created, then the locally build docker image has to be tagged to the dockerhub remote repository using the command
+                        docker tag <locally-build-docker-iamge-name> <dockerhub-repository-path>
+    - After, this the image has to be pushed to the dockerhub repository using the command
+                        docker push <dockerhub-repository-path>
+    - Finally, after the locally build docker image is pushed, now using the kubectl command deploy the container which is 
+                        kubectl create deployment <kubernetes-container-name> --image=<dockerhub-image-name>
+    - Once, successful we get the response saying "created".
+    - After this step, we can see the status of the containers, deployments, pods and also logs related to them.
+    - The useful commands now are 
+                        kubectl get deployments
+                        kubectl get pods
+                        kubectl logs <kubernetes-pod-name>
+                        kubeclt dashboard - This opens up a browser window with all the infromation related to clusters, pods, deployments etc.
+
+
+                                                    BEHIND THE SCENES
+
+    This section explains what happens behind when the command "kubectl create deployment <kubernetes-container-name> --image=<dockerhub-image-name>" is used.
+    This command first basically understands that this is a "deployment" object and creates a deployment object.
+    Once, the deployment object is created it instructs the "master node" in the cluster to take the responsibility for the next steps which can be creating the worker nodes, pods etc.
+    Now, the master node which contains the "Scheduler" checks for the active pods which can deploy the newly created pods to host the applicaiton.
+    The "kubelet" inside the worker nodes manages the pods and the master node. 
+
+                                                    SERVICES (OBJECT)
+
+    - Services in Kubernetes are one of the most important objects which helps us to identify the pods.
+    - Services manage the pods and exposes them within the cluster with the help of IP Address.
+    - Internally, and by default the IP Address are designed to change whenever the Pods are reassigned.
+    - Also, services helps us to combine the pods internally using the loadbalancers and can help us to create a static IP address
+      and also helps to make the communication between the pods to outside of the cluster.
+    - Without service objects, pods are very difficult to manage and identify outside of the cluster.  
+    - The commands used for implementing the service object in kubernetes are as follows
+                    
+                                    kubectl create service
+
+    - But, the most elegant way to. expose the kubernetes pods is by using the following command
+                    
+                    kubectl expose deployment <kubernetes-app-name> --port=<port-of-application> --type=<ClusterIP/LoadBalancer>
+    
+    - Once, the above command is used, then we can get the complete picture of the kubernetes cluster by the command
+                    
+                                    minikube service <kubernetes-app-name>
+    
+    - The above, command opens up a browser window, which display all the information related to the kubernetes clusters of your project.
+
+                                                    SCALING THE PODS
+
+    - As we know, one of the best and important feature of kubernetes is automatic scaling of the pods which means the same instance of the pods is 
+    created multiple times depending upon the replicas we inform kubernetes to create.
+    - The command that is used to create the scaling feature in the kubernetes application is as follows.
+
+                                kubectl scale deployment/<kuberentes-app-name> --replicas=<number-of-replica-pods-you-wish-to-create>
+
+    - After using the above command, kubernetes creates 3 total pods which will be up and running. 
+    - All the newly created pods will be assigned with different individual IP Address and all these will work independently.
+    - Let us assume, out of 3 active pods now, using 1 of the pods an user is accessing the "error" page, the pod goes down and becomes inactive.
+    - In this case, the traffic is divereted to remaining 2 active pods by kubernetes automatically and keeps the application available to the users.
+    - Also, eventually kubernetes takes care of bringing back the 1 deactivated pod to live and running...
+
+    - To update the changes into the pods, first it is mandatory to build the image and then push the changes to the dockerhub.
+    - So that the kubernetes can automatically detect the changes and run the pods based on the new changes in the pods.
+    - 
+       
+
+
+ 
+
+
+
+

@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "name": "kubernetes",
+  "version": "1.0.0",
+  "description": "This is the project that focuses mainly on Kubernetes and how to setup a cluster with all the important blocks like worker(pods, proxy) and master(api servers, schedulers etc) nodes and configuring the kubernetes cluster with kubectl to work with commands from your local machine to interact with the remote/local server and in this project we are  using the minikube to test the process on the local server for which the minikube is configured with \"docker\" driver.  ",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snadi043/Docker360.git"
+  },
+  "author": "SAI HARNADH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snadi043/Docker360/issues"
+  },
+  "homepage": "https://github.com/snadi043/Docker360#readme"
+}
