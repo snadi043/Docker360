@@ -1,0 +1,75 @@
+# The main purpose of this file which is "Docker Compose" file is to make the process of building and running 
+# the images and container simultaneously easy when working with simple or projects dealing with multi container communication mechanism.
+
+# So, inorder to make the steps easy in dealing with docker images and container we have to use the concept of "Docker compose"
+# and for that to happen, we have to write a file with all the configurations in the file for all the services involved in the project.
+
+# The "Services" here are basically refered to "containers" in the project.
+# Since, this project is divided into 3 main isolated container, we have to consider them as 3 services in Docker Compose file.
+
+# Similar to how we write dockerfile there are set of instructions/commands/keys to write the Docker Compose file.
+# Also, in the docker compose file all the children/sub-categories should be written with certain indentation so that docker can understand those keywords and execute them.
+
+# Firstly to start the Docker Compose file we have to configure the version. But, in the version 2 of docker compose, there is no need to mention the version keyword to start the docker compose file.
+# version: '3.8'
+# The second step is to write all the services (i,e the containers of the project) as children under services keyword.
+services:
+  # The first service which is "mongodb" is mentioned under the services keyword as the child to the service with "1 tab".
+  mongodb:
+  # Again under the service (mongodb container), we have to mention the different docker configurations we have setup with the commands previously in the terminal.
+  # Different configurations include images, volumes, bind-mounts, environment variables etc. 
+    image: 'mongo' 
+    volumes:
+      - data:/app/data
+    environment:
+      - MONGO_USERNAME=max
+      - MONGO_PASSWORD=secret
+
+# Networks in the Docker Compose file can be defined by us explicitly, but by default Docker creates a network by itself when 
+# writting a docker compose file and makes sure all the services are assigned to that network to perform communication among themselves.
+
+# Here, we specify the configuration for our second service which is docker-frontend
+  docker-frontend:
+  # To build an image based on the custom image in our project there is a sepcial keyword in docker compose which is "build".
+  # To this build keyword we specify the relative path so that docker can fetch the "Dockerfile" based on which the custom image has to be build.
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+  # Ports is a keyword which is used to specify to which ports that particular service has to listen and deploy so both source and destination ports has to be specified. 
+    ports:
+      - 3000:3000
+    # depends-on is a keyword which has to be specified if a service depends on another service to build the application. 
+    # Here the frontend endpoints are to be communicated with backend apis so there is a dependency.
+    depends_on:
+      - 'docker-backend'
+  
+  # Now, the third service is configured here which is "docker-backend"
+  docker-backend:
+  # This is the other version of configuring the custom image build in docker compose file.
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - mongo-named-volume-data:/data/db
+      - logs:/app/logs
+      - /app/node_modules
+      - ./backend:/app
+    # This is the other format of specifying the environment variables in the docker compose file.
+    env_file:
+      - ./env/backend.env
+    ports:
+      - '80:80'
+    depends_on:
+      - 'mongodb'
+
+# The named volumes has to specially mentioned under "volumes" keyword again so that the docker reads it and assigns it to the actual volumes with the defined names.
+volumes:
+  data:
+  mongo-named-volume-data:
+  logs:
+
+# Once, all the configurations are created in the compose file, the commands used to work with docker compose are 
+  # "docker compose up" -> this will create all the images, volumes, networks and containers we have written in the services of the project.
+  # "docker compose down" -> this will delete all the images, networks and containers expect the "volumes" inorder to persist the data.
+
+  

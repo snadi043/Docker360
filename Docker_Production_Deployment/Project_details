@@ -1,0 +1,67 @@
+  
+                                                  <!-- KUBERNETES -->
+
+    - Kubernetes is a open source system or a framework in a way which mainly concentrates on automating the process of availability, scaling, traffic balancing and optimizing the containerized applications in synchronous with any cloud infrastrucutre providers (AWS, AZURE, GOOGLE CLOUD).
+    - This is really helpful in cases where the application is limited with deploying it manually using EC2 service with amazon or any similar service in any other cloud infrastructure provider because the containers can crash anytime for any reason and we as the devlopers cannot monitor the containers 24/7.
+    - The above mentioned specifications / issues are handled in AWS with the helf of automatic assiging of more contatiners by checking the health of the containers in AWS EC2, automatic assigning of containers and removing them based on the incoming traffic and using the conept of loadbalancing to persist a static IP address and manage the traffic equally among all the available containers.
+    - Also, with AWS it is a great option where any application can be integrated with the concept of "MANAGED SERVICES", where the above mentioned advantages of using KUBERNETES are addressed but still there are certain downsides of it.
+    - The downside involved in maintaining the applications even with "MANAGED SERVICE" is locking the application in one cloud infrastructure provider which means let's say an application is deployed in AWS ECS then that application is locked with only that specific infrastructre becasue the application is configured as per the rules and guidelines provided by the AWS systems to deploy the application in cloud.
+  
+                                                <!-- KUBERNETES ARCHITECTURE -->
+
+    - This section explains about the important concepts and architecture of kubernetes and how the internal components in kubernetes work together to achieve the features of kubernetes.
+    - In a big picture kubernetes architecture can be defined as "THE COMMUNICATION BETWEEN THE CLUSTER IN KUBERNETES WITH ANY CLOUD INFRASTRUCUTRE PROVIDER."
+    - The components of cluster in kubernetes are explained in detail below.
+        - POD (A Pod is basically the smallest building block in a kuberenetes system which can be compared to a conatiner in AWS ECS. A Pod can manage a single container or also able to handle multiple containers. The pod is managed by a component called "WORKER NODE".)
+        - PROXY (A Proxy is basically a system which handles all the configurations regarding the networking and communication in between the pods and how these pods should reach the worker nodes to make the application available all the times.) 
+              - KUBELET (A process which is responsible for configuring the relation between worker node and the master node).
+              - KUBE-PROXY (A system that manages the communication in between the pods and the worker node.)
+        - WORKER NODE (A Worker Node is a layer/component surrounding the pod which can be represented as a remote server (which has certain amount of CPU, OS, Storage etc) in AWS ECS service. The worker node handles all the functionalities of the PODS and PROXY interanally, which can be refered to as a small cluster by itself).
+        - MASTER NODE (A Master Node is the parent node or so called control plane which works in conjuction with all the assigned worker nodes, makes them available and handles their functionality all the time. If a single worker node is down or failed the master node takes care of handling the situation to make it restart or assign a new worker node. A master node is in reality can be deployed in multiple machines so it is always up and running, but usually it is managed only in one machine to keep is simple.)
+              - API SERVER - works with kubelet to manage the communication with the cloud service provider with worker nodes and the pods.
+              - SCHEDULER - checks and manages the pods and their health, status checks and regulates them in sync with worker nodes.
+              - KUBE CONTROLLER MANAGER - Watches the worker nodes, controls them and verify the number of worker nodes running.
+              - CLOUD CONTROLLER MANAGER - It is similar to kube controller manager, but confined to cloud service provider. 
+        - All the above mentioned components create a KUBERNETES CLUSTER (WORKER NODE (PODS, PROXY) & MASTER NODE).
+        - To this cluster the cloud infrastructure is integrated with specific API to configure the KUBERNETES ARCHITECUTRE with the SERVICES to be created in the cloud infrastructure provider.
+        - KUBERNETES achieve the feature of configuring the cluster to any cloud service provider with KUBERNETES configuration file which is scalable which means a single file can be integrated with multiple cloud service providers. 
+  
+    - There are tools available to make the steps easy regarding what kubernetes dont do in general. So, basically these tools will take care of creation of clusters (Worker nodes and Master node), creation of load balancers, File systems related to the worker node pods etc. Some of the famous tools useful to create managed kubernetes works are 
+            - Kubermatic
+            - AWS EKS (Elastic Kubernetes Service) 
+                 - As we know that kubernetes is an open source framework / system helpful to manage the cloud baesd containerized application in terms of availability, scaling and traffic control, AWS EKS is a defined as "AMAZON ELASTIC KUBERNETES SERVICE", which is basically the whole kubernetes system which is provided by the "AMAZON AWS CLOUD". This service is compatible not just for AWS cloud infrastructure but for other cloud providers as well. 
+   
+                                                <!-- INSTALLATIONS TO BE DONE TO WORK WITH KUBERNETES. -->
+          - CLUSTER (Worker node, Master node)
+          - KUBECTL - (KUBECTL, Kubernetes command line tool also refered as kubecontrol instructs the cluster, so that the master node takes the instructions and manages the worker nodes to perform the actions accordingly as per the instructions.). KUBECTL can instruct the clusters which are present in your local machine or in the remote machines.
+                                                <!-- COMMANDS TO INSTALL KUBECTL IN MACOS MACHINE -->
+          
+          - In this machine, kubectl is installed using homebrew package.
+                        - brew install kubectl
+                        - kubectl version --client 
+
+          - MINIKUBE This is a setup in the local machine which creates a cluster in your local machine and communicates to that cluster to make the installations.
+                        - curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-darwin-arm64 
+                        - sudo install minikube-darwin-arm64 /usr/local/bin/minikube
+                        - minikube start
+                                          
+                                          Driver installation commands
+          - In this machine the minikube driver compatabile to run with kubectl is configured with docker. The commands to setup the docker configured with minikube are as follows.
+                                          
+                        - minikube start --driver=docker 
+                        - minikube config set driver docker
+
+      - Kubernetes communicates through the concept called "OBJECTS". 
+      - Objects are basically the key blocks in the kubernetes which perform certain jobs assgined to them.
+      - Some of the OBJECTS in kuberenetes are PODS, DEPLOYMENT, CONTAINERS, SERVICES, VOLUMES, PROXY etc..
+      - So kubernetes gets into action by understanding the objects which are written either as commands (KUBECTL) or in a file so that it instructs the working nodes and internally pods to perform the actions.
+      - The commands can be given to the kubernetes either imperatively or declaratively.
+      - Let us start with the PODS, considering them as OBJECT and as we know PODS are the smallest building block in Kubernetes cluster.
+      - These pods are not persistant, which means they dont store anything once they are removed are stopped.
+      
+                                                DEPLOYMENT OBJECT
+
+      - Deployment Object is one of the key objects in Kubernetes which in behind the scenes acts as an application cluster deployment controller, because we are not manaully creating any pods or containers in kuberenetes.
+      - These are automatically created by kubernetes by working with "DEPLOYMENT" object.
+      - In this deployment object it is our job to define how many pods has to be assigned and all other features are taken care of kuberenetes like how to scale the pods, how to turn on/off the pods, start,reset pods etc.
+      - Also, using the "DEPLOYMENT" Oject we can configure to rollback the pods in case of any wrong deployments take place in the process.    
