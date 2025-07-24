@@ -174,9 +174,30 @@
 
     - To update the changes into the pods, first it is mandatory to build the image and then push the changes to the dockerhub.
     - So that the kubernetes can automatically detect the changes and run the pods based on the new changes in the pods.
-    - 
-       
+    - Now after building and pushing the upated image to the dockerhub, it is then transfered to the pods using the following command
+                    
+            kubectl set image deployment/<name-of-kuberenetes-deployment> <name-of-kubernetes-cluster>=<name-of-docker-image-path> 
 
+    - But, inorder to make sure that the kuberentes picks up the latest updated changes of the image from the dockerhub it is always a best
+      practise to add the tag to the image when updating the pods in the kuberentes cluster. So, the above commands can be refactored as
+       
+            kubectl set image deployment/<name-of-kuberenetes-deployment> <name-of-kubernetes-cluster>=<name-of-docker-image-path:<image-version>> 
+
+    - After, the image is set to the kubernetes cluster, the status of the updated rollback can be seen using the command below.
+
+            kubectl rollback status deployment/<name-of-kuberenetes-deployment>
+
+
+    - Also, with kuberenetes once, the images are pushed or updated in the pods with kubernetes deployment, there is also a flexibility that
+      kuberenetes provides us to switch in between the rollouts of the application code (image.)
+    - The reason why it is important to make the versions with docker images is this, that it is easy for the kubernetes to identify the updates 
+      within the images and also it helps the developers to switch between the rollouts based on the revisons.
+    - Some of the important commands, that helps us to deal with kubernetes rollouts and history are as follows.
+                
+                kubectl rollout history deployment/<kubernetes-deployment-name>
+                kubectl rollout status deployment/<kubernetes-deployment-name>
+                kubectl rollout history deployment/<kubernetes-deployment-name> --revision=<revison-number>
+                kubectl rollout undo deployment/<kubernetes-deployment-name> --to-revision=<revision-number>    
 
  
 
