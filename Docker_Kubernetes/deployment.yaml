@@ -1,0 +1,31 @@
+# For reference: https://kubernetes.io/docs/concepts/overview/working-with-objects/
+
+# Start any Kuberenetes YAML File with apiVersion.
+apiVersion: apps/v1
+# kind - This is the value which kuberenetes understands for which type of object that this file is responsible to handle. 
+kind: Deployment
+# metadata - This is the general information about the Deployment
+metadata:
+  name: kubernetes-first-application
+# spec - This is the important section which describes about the specifications of the Deployment.
+spec:
+  # selector - Describes the information about the pods that this deployment has to handle and take care of in terms of automatic maintainance.
+  selector:
+    matchLabels:
+      app: node-application
+  # replicas - Describes how many pods that this Deployment has to create and maintain.
+  replicas: 1
+  # template - Describes the details about the image in the pods, details about identifying the pods with labels.
+  template:
+    # Nested in the template, goes the metadata for the template.
+    metadata:
+      # The metadata for the template (which actually represents the image) is labels helps to identify the pods and attach these to the deployment
+      # labels can be represented in the list format. 
+      labels:
+        app: node-application
+    # To the template as expalined above, "spec" describes about the important specifications of the image in the template like containers.
+    spec:
+      # Containers - Nested to the "spec" of the "template" describes about the name of the container and the image-name to be handled in the pods.
+      containers:
+        - name: node-application
+          image: snadi043/kubernetes-node-application

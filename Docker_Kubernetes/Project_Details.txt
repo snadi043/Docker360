@@ -199,6 +199,35 @@
                 kubectl rollout history deployment/<kubernetes-deployment-name> --revision=<revison-number>
                 kubectl rollout undo deployment/<kubernetes-deployment-name> --to-revision=<revision-number>    
 
+    - In Kubernetes, using the kubectl command line package we can interact with the kuberenetes clusters for that matter anything that kubernetes offers.
+    - There are 2 main procedures that this interaction with kuberentes system can be done.
+                - Imperative (This is the process where the kubectl helps us to write commands from the local terminal to interact with clusters)
+                - Declarative (This is the process where a seperate file can be created with all the instructions that kubernetes systems need as per the project requirements)
+    - The Impereative way is thus far what is discussed in the above sections which deals with commands.
+    - The imperative process is often considered as hardway to implement the kubernetes applications, since it needs precesion in dealing with long commands which can be error prone
+      and hard to remeber.
+    - So, the alternative approach to deal with these problems is to use the "Declarative" way.
+    - As, explained "Declarative" way is the process where a seperate file can be created and that can be applied to the kuberentes application.
+    - Kuberenetes allows this process and the files are called "Rescource Management Files". These are designed to be written in "YAML" format.
+    - These files can be compared with Docker beacuse these files have similar relations in comparision with Docker Compose Files.
+    - Kubernetes allows the developers to build multiple "YAML" files which can be seperated based on the kuberentes "OBJECTS" or also can be combined to a "SINGLE YAML" file.
+    - The commands used to handle the applications with kubernetes YAML files are as follows.
+                
+                            kubectl apply -f=<name-of-yaml-file>.yaml  
+                            kubectl delete -f <name-of-yaml-file>.yaml
+                            kubectl apply -f=<name-of-yaml-file>.yaml -f=<name-of-yaml-file>.yaml
+                            kubectl delete -f <name-of-yaml-file>.yaml, <name-of-yaml-file>.yaml
+
+    - The skeleton for the declarative approach to address the kubernetes YAML file especially for "DEPLOYMENT" object can be seen in the link attached below.
+                            
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/
+    
+    - The skeleton for the declarative approach to address the kubernetes YAML file especially for "SERVICE" object can be seen in the link attached below
+
+                            https://kubernetes.io/docs/concepts/services-networking/service/
+    
+
+
  
 
 
