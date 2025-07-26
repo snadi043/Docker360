@@ -225,7 +225,21 @@
     - The skeleton for the declarative approach to address the kubernetes YAML file especially for "SERVICE" object can be seen in the link attached below
 
                             https://kubernetes.io/docs/concepts/services-networking/service/
-    
+
+    - "apply" is the command to be used along with kubectl to add any kubernetes "Object" to perform actions speciying the -f (filename) tag to the command which 
+       are listed above in the lines 216 - 219. We can pass multiple filenames to the same command to perform actions in "DECLARATIVE" approach.
+    - To update any changes in the "YAML" files and to be used with kubernetes application simply run the same commands so that kubernetes detects the changes from the
+       YAML file and does the updates in your code.
+    - Kubernetes YAML files can also be merged into one single file which means basically multiple Kubernetes Resources
+      can be placed into a single YAML file but the condition is that each Kubernetes Object Resource should be seperated by "---" in between the Objects. This is the YAML
+      specific rule which indicates a new Object is being created after every "---"
+    - It is promoted that always placing the SERVICE Object before the DEPLOYMENT Object when using the single YAML file is a good practise, because the service resources 
+      which are the dependent on the Deployment are created first so they have good transcations in terms of understanding the resources to be created in the application.
+
+    - Kuberenetes also provides us with the concept called "LIVENESS", which gives the information about the health of the pods and details about how to start the pods and 
+      when to start them whenever there is an failure with the pods.
+    - LIVENESS can be enabled in the "YAML" file of the Deployment Object under the "CONTAINERS" resource. 
+
 
 
  

@@ -1,3 +1,25 @@
+# For reference: https://kubernetes.io/docs/concepts/services-networking/service/
+
+# Start any Kuberenetes YAML File with apiVersion. For Object apiVersion can be just v1.
+apiVersion: v1
+
+# Kind - Describes the type of the kubernetes Object
+kind: Service
+
+# metadata - Describes the information about the Object like name.
+metadata:
+  name: backend
+
+# spec - Describes the resources that this Object depend upon and how they are accessed using selector.
+spec:
+  selector:
+    app: node-application
+  ports:
+    - protocol: 'TCP'
+      targetPort: 8080
+      port: 80
+  type: LoadBalancer
+---
 # For reference: https://kubernetes.io/docs/concepts/overview/working-with-objects/
 
 # Start any Kuberenetes YAML File with apiVersion.
@@ -33,7 +55,5 @@ spec:
             httpGet:
               path: /
               port: 8080
+            initialDelaySeconds: 5
             periodSeconds: 10
-            initialDelaySeconds: 5  
-
-
