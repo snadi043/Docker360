@@ -1,0 +1,24 @@
+{
+  "name": "docker_kubernetes_volumes",
+  "version": "1.0.0",
+  "description": "This project emphasizes on creating the volumes with Kuberentes and managing the state within the podsand handling the data to be persistant in the application.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snadi043/Docker360.git"
+  },
+  "author": "SAI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snadi043/Docker360/issues"
+  },
+  "homepage": "https://github.com/snadi043/Docker360#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security"
+  }
+}
