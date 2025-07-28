@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: story-kubernetes-volume
+spec:
+  selector:
+    app: story
+  ports:
+    - protocol: 'TCP' 
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-kubernetes-volumes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: snadi043/docker-kubernetes-volumes
+          volumeMounts:
+            - mountPath: /app/story
+              name: story-volume 
+      volumes:
+        - name: story-volume
+          emptyDir: {}
+
+
+
+
+  
+

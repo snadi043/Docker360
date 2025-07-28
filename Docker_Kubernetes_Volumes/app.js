@@ -1,5 +1,5 @@
 const path = require('path');
-const app = require('express');
+const express = require('express');
 
 const fs = require('fs');
 const bodyParser = require('body-parser');
@@ -30,6 +30,10 @@ app.post('/story', (req, res) => {
         }
         res.status(201).json({message: 'Text was stored!'});
     });
+});
+
+app.get('/error', () => {
+    process.exit(1);
 });
 
 app.listen(3000);
