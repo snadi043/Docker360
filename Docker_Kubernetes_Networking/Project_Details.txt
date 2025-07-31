@@ -1,0 +1,26 @@
+INTRODUCTION:
+This project main focus is to build multiple small backend "NODE" projects which deals with REST API's and
+which are capabile of communicating with each other.
+The small projects included in this application (DOCKER_KUBERNETES_NETWORKING) are as follows
+    - USERS_API (This project has node REST API's dealing with creating users and storing them without any database dependency.)
+    - AUTH_API (This project has node REST API's dealing with user authentication using tokens and authorization headers and authorizes users by handling the request coming from USERS_API project.)
+    - TASKS_API (This project also has node REST API's letting the users to create tasks by which can be treated as a frontend to the USERS_API project but this runs independently from other two projects.)
+      The TASKS_API talks to the AUTH_API to verify the token access which identifies the users with verified tokens to perform the actions like "CREATING THE TASKS & FETCHING THE TASKS".
+
+GOAL:
+The main motive of this application is to create a project which mainily focuses on networking in between all the three small projects when placed them in a kubernetes world and depending upon DOCKER for 
+creating the images and remote repositories.
+
+STEPS IN BUILDING THE APPLICATION:
+- First, starting with creating the each individual small projects and create the dockerfiles, docker images and dockerhub repositories for them.
+    - USERS_API & - TASKS_API  
+      -- First installing all the dependencies needed to build the USERS_API application.
+      -- The dependencies include EXPRESS, BODY-PARSER and AXIOS.
+      -- Write all the api's needed for the application with defined "endpoints" with the server-name as the hostname, so that docker can detect and manages the applications (user_api & auth_api) listen on
+         the same port and build a network between them so that they can communicate with each other.
+      -- Write the dockerfile for the application to configure the application with docker to create images and containers.
+- Finally, create a docker-compose.yaml file to make it simple for creating the images and containers for all the three small projects and handling them with simple docker-compose commands.
+- Commands used:
+    docker compose up --build
+    docker compose down
+

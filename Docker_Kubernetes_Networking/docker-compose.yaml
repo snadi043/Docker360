@@ -1,0 +1,20 @@
+services:
+  auth:
+    build:
+      context: ./auth_api
+      dockerfile: Dockerfile
+  users:
+    build:
+        context: ./users_api
+        dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+  tasks:
+    build:
+      context: ./tasks_api
+      dockerfile: Dockerfile
+    environment:
+      - TASK_FILE=task
+    ports:
+      - 8000:8000
+
