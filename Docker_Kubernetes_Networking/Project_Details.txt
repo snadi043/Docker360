@@ -21,6 +21,34 @@ STEPS IN BUILDING THE APPLICATION:
       -- Write the dockerfile for the application to configure the application with docker to create images and containers.
 - Finally, create a docker-compose.yaml file to make it simple for creating the images and containers for all the three small projects and handling them with simple docker-compose commands.
 - Commands used:
-    docker compose up --build
-    docker compose down
+                                docker compose up --build
+                                docker compose down
+
+- Once, the main structure / skeleton for the three small projects are created, it is now time to jump into the individual small projects and create the kubernetes environment for them and 
+  enable them with dockerhub images to identify the changes and replicate the changes in the pods within kubernetes containers.
+- Firstly, starting with "users_api" project
+- Create a deployment and service file which are confined to the "users_api" project.
+- Create a dockerhub repository to this project alone.
+- Push the changes using the docker image with the tag name.
+- Apply the deployment and service yaml files to the "users_api" kubernetes project.
+
+Once the first small project "USERS_API" is all done executing with docker and kubernetes and checking the functionality of the REST API's of the project in postman, it is then the time to work on
+next small project which is "AUTH_API". 
+As the main project "DOCKER_KUBERNETES_NETWORKING" one of the core motive is to build the "internal pod communication", the project "AUTH_API" has to be setup in a way that it can communicate to
+the previously build small project "USERS_API".
+
+- Before jumping into the "AUTH_API" project, it is important to refactor the endpoints in the "USERS_API" project beacuse now, the emphasis is to build the dependency between the two applications.
+- In the kubernetes world, if two containers has to communicate with each other and which are in the same pod the "keyword" to be used is "localhost" as the hostname in the endpoints.
+      
+      So, in the docker-compose file the environment variable is set to AUTH_ADDRESS=auth
+          in the kubernetes users-deployment file the environment variable is set to AUTH_ADDRESS=localhost
+          
+- Now, since the changes are made in the "users_app" file the application has to be rebuild with docker image and pushed to the repository.
+- The same is the case with docker inorder to build the network between two containers and in this case the environment variables can be used to register the hostnames in the docker-compose file.
+- For the "AUTH_API" project first, create a remote dockerhub repository and build the image for the individual project.
+- Tag the image to the remote dockerhub repository and push the changes.
+- Now, inorder to create a pod internal communication there is no requirement to create a new deployment.yaml file for the "auth_api" project instead add a new container with the docker image in the
+  "user_api" deployment.yaml file.
+
+
 

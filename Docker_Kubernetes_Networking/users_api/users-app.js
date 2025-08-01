@@ -6,7 +6,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.get('/signup', async(req, res) => {
+app.post('/signup', async(req, res) => {
     const email = req.body.email;
     const password = req.body.password; 
 
@@ -19,7 +19,7 @@ app.get('/signup', async(req, res) => {
        }
     
     try{
-        const hashedPswd = axios.get('http://auth/hashed-password/' + password);
+        const hashedPswd = axios.get(`http://${process.env.AUTH_ADDRESS}/hashed-password/` + password);
         console.log(hashedPswd, email);
         res.status(201).json({message: 'User Created.'});
     }
@@ -43,7 +43,7 @@ app.post('/login', async(req, res) => {
     }
 
     const hashedPswd = password + '_hash';
-    const response = axios.get('http://auth/token/' + hashedPswd + '/' + password);
+    const response = axios.get(`http://${process.env.AUTH_ADDRESS}/token/` + hashedPswd + '/' + password);
 
     if(response.status === 200){
         return res.status(200).json({token: response.data.token });
