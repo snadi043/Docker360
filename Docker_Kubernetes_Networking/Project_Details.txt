@@ -42,7 +42,7 @@ the previously build small project "USERS_API".
       
       So, in the docker-compose file the environment variable is set to AUTH_ADDRESS=auth
           in the kubernetes users-deployment file the environment variable is set to AUTH_ADDRESS=localhost
-          
+
 - Now, since the changes are made in the "users_app" file the application has to be rebuild with docker image and pushed to the repository.
 - The same is the case with docker inorder to build the network between two containers and in this case the environment variables can be used to register the hostnames in the docker-compose file.
 - For the "AUTH_API" project first, create a remote dockerhub repository and build the image for the individual project.
@@ -50,5 +50,23 @@ the previously build small project "USERS_API".
 - Now, inorder to create a pod internal communication there is no requirement to create a new deployment.yaml file for the "auth_api" project instead add a new container with the docker image in the
   "user_api" deployment.yaml file.
 
+Now, two main small projects "USERS_API" & "AUTH_API" are created and configured to achieve the concepts of "POD INTERNAL COMMUNICATION" in both kubernetes and docker platforms, now it is time to
+  seperate both the containers to achieve the concept of "COMMUNICATION BETWEEN THE PODS".
+In the realtime, it is a good practise that every single application is build in an individual pod to keep the maintainance and functionality of the application simple and scalable.
+So, now in this case, the "USERS_API" & "AUTH_API" projects has to be seperated for which, since in the previous steps the deployment and the service yaml files are created for the "USERS_API" project,
+  in this step it is time to create sepereate deployment and service yaml files for "AUTH_API" project.
+The important refactoring that has to be done in this process is mainly, keeping the "AUTH_API" private, which is not meant to be "public facing". So the type of the service for "AUTH_API" is to be changed
+  to "CLUSTERIP", which has the ability to provide the Loadbalancing to some extent and can provide the static IP address and also make the service private to the cluster.
+Also, the ports of the "AUTH_API" project has to be changed as per the application. 
+Other important changes include, removing the "AUTH" container from the "USERS_API" container because now these two applications are no more running on the concept of "PODS INTERNAL COMMUNICATION".
+  So, a new service for the "AUTH_API" project has to be created along with a new deployment yaml file, where the "AUTH" container has to be created which is removed from the "USERS_API" project.
+
+Now, to create the communication between the pods, there are three main ways where the containers with the proper environment variables has to be mapped.
+ - Knowing the IP address of the application through the service and placing it in the environment variable.
+ - Utilizing the feature of Kubernetes provided automatic IP Address generation which is accessible through an specific environment variable in a format which is all CAPITALS, seperated by _ and adding the 
+   SERIVCE_HOST to the end of the environment variable. So, the format is "<NAME_OF_SERVICE>_SERVICE_HOST".
+ - The last method of creating the "PODS COMMUNICATION" is using the Kubernetes provided feature called "CORE DNS", Domain Network Service, which provides us with the namespaces using which the services can be
+   identified within the cluster in kubernetes environment and the format to be used is "<NAME-OF-SERVICE>.<NAMESPACE-NAME>". If you dont have any namespace assigned to the service, the "default" is the value 
+   to be used. 
 
 

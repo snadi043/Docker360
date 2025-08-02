@@ -19,7 +19,7 @@ app.post('/signup', async(req, res) => {
        }
     
     try{
-        const hashedPswd = axios.get(`http://${process.env.AUTH_ADDRESS}/hashed-password/` + password);
+        const hashedPswd = axios.get(`http://${process.env.AUTH_SERVICE_SERVICE_HOST}/hashed-password/` + password);
         console.log(hashedPswd, email);
         res.status(201).json({message: 'User Created.'});
     }

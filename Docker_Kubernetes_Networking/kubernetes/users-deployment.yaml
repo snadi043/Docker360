@@ -17,7 +17,6 @@ spec:
           image: snadi043/docker_kubernetes_networking_users_api:latest
           env:
             - name: AUTH_ADDRESS
-              value: localhost
-        - name: auth
-          image: snadi043/docker_kubernetes_networking_auth_api:latest
+              # value: "10.104.213.243"
+              value: "auth-service.default"
   
