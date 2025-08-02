@@ -18,6 +18,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - TASK_FILE=task
+      - AUTH_ADDRESS=auth
+      # - AUTH_SERVICE_SERVICE_HOST=auth
     ports:
       - 8000:8000
 

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+        - name: tasks
+          image: snadi043/docker_kubernetes_networking_tasks_api:latest
+          env:
+            - name: AUTH_ADDRESS
+              value: "auth-service.default"
+            - name: TASK_FILE
+              value: task

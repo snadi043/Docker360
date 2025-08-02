@@ -69,4 +69,10 @@ Now, to create the communication between the pods, there are three main ways whe
    identified within the cluster in kubernetes environment and the format to be used is "<NAME-OF-SERVICE>.<NAMESPACE-NAME>". If you dont have any namespace assigned to the service, the "default" is the value 
    to be used. 
 
+  - Finally, now it is the time to jump into the last small project which is tasks application.
+  - Similar to the two previous small applications, it is also necessary to create the dockerhub repository, build docker image and docker containers and push the image to repository.
+  - Also, it is necessary to create the deployment and service yaml files as per the project requirements such that, the "TASKS_API" application can communicate to the "AUTH_API" which is not public facing and
+    also should be able to communicate to "USERS_API" which is public facing applicaiton.
+  - 
+
 
