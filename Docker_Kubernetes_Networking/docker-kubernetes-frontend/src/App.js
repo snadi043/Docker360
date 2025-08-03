@@ -1,25 +1,54 @@
-import logo from './logo.svg';
+import React, {useCallback, useEffect, useState} from 'react';
+import NewTasks from './components/NewTasks';
+import TasksList from './components/TasksList';
+
 import './App.css';
 
-function App() {
+const App = () => {
+  const [tasks, setTasks] = useState('');
+
+  const fetchTasks = useCallback(() => {
+    fetch('', {
+      headers: {
+        Authorization: 'Bearer abc',
+      }
+    })
+    .then((response) => {return response.json()})
+    .then((jsonData) => {setTasks(jsonData.tasks)});
+  }, []);
+
+  useEffect(() => {
+      fetchTasks();
+    }, 
+  [fetchTasks]
+);
+
+const addTasksHandler = (task) => {
+  fetch('', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer abc',
+    },
+    body: JSON.stringify(task),
+  }).then((response) => {
+    return response.json();
+  }).then((resData) => {
+    console.log(resData);
+  });
+}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'> 
+      <section>
+        <NewTasks onAddTasks={addTasksHandler}/>
+        </section>
+        <section>
+          <button onClick={fetchTasks}>Fetch Tasks</button>
+          <TasksList tasks={tasks}></TasksList>
+      </section>
     </div>
-  );
+  )
 }
 
 export default App;
