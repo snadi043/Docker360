@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +10,7 @@ const axios = require('axios');
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 const filePath = path.join(__dirname, process.env.TASK_FILE, 'tasks.txt');
 
@@ -21,6 +23,13 @@ const extractAndVerifyToken = async (headers) => {
   const response = await axios.get(`http://${process.env.AUTH_ADDRESS}/verify-token/` + token);
   return response.data.uid;
 };
+
+app.use((req, res, next) => {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
 
 app.get('/tasks', async(req, res) => {
     try{

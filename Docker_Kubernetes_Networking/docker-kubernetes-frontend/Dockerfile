@@ -1,4 +1,4 @@
-FROM 'node'
+FROM node AS builder
 
 WORKDIR /app
 
@@ -10,11 +10,11 @@ COPY . .
 
 RUN npm run build
 
-FROM 'nginx'
+FROM nginx
 
 COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./src/nginx/nginx.conf /etc/nginx/nginx.conf.d/default.conf:ro
 
 EXPOSE 80
 
