@@ -8,7 +8,7 @@ const App = () => {
   const [tasks, setTasks] = useState('');
 
   const fetchTasks = useCallback(() => {
-    fetch('http://192.168.49.2:31500/tasks', {
+    fetch('/api/tasks', {
       headers: {
         Authorization: 'Bearer abc',
       }
@@ -24,7 +24,7 @@ const App = () => {
 );
 
 const addTasksHandler = (task) => {
-  fetch('http://192.168.49.2:31500/tasks', {
+  fetch('/api/tasks', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
