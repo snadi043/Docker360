@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-kub-service
+spec:
+  selector:
+    app: users-kub-deploy
+  ports:
+    - protocol: 'TCP'
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: users-kub-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: users-kub-deploy
+  template:
+    metadata:
+      labels:
+        app: users-kub-deploy
+    spec:
+      containers:
+        - name: users-api
+          image: snadi043/users-kub-deploy:latest
+

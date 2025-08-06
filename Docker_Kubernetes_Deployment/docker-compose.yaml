@@ -1,0 +1,18 @@
+services:
+  users-api:
+    build:
+      context: ./users-api
+      dockerfile: Dockerfile
+    ports:
+      - '8000:3000'
+    environment:
+      MONGODB_CONNECTION_URI: 'mongodb+srv://snadi043:fJ6Zz34blVSaiKOJ@kubernetes-eks-deployme.m0squgm.mongodb.net/users?retryWrites=true&w=majority'
+      AUTH_API_ADDRESS: 'auth:3000'
+  auth-api:
+    build:
+      context: ./auth-api
+      dockerfile: Dockerfile
+    ports:
+      - '8000:3000'
+    environment:
+      - TOKEN_KEY='keepitsecureeverytime'
