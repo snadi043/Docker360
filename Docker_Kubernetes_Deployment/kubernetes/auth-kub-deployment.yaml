@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-kub-service
+spec:
+  selector:
+    app: auth-kub-deploy
+  ports:
+    - protocol: 'TCP'
+      port: 
+      targetPort: 
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: auth-kub-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: auth-kub-deploy
+  template:
+    metadata:
+      labels:
+        app: auth-kub-deploy
+    spec:
+      containers:
+        - name: auth-api
+          image: snadi043/auth-kub-deploy:latest
+          env:
+            - name: TOKEN_KEY
+              value:  'keepitsecureeverytime'
+        
+

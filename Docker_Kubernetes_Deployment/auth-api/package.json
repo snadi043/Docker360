@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "name": "auth-api",
+  "version": "1.0.0",
+  "description": "Project for the authentication of th users in a kubernetes deployment application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snadi043/Docker360.git"
+  },
+  "author": "SAI HARNADH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snadi043/Docker360/issues"
+  },
+  "homepage": "https://github.com/snadi043/Docker360#readme"
+}
