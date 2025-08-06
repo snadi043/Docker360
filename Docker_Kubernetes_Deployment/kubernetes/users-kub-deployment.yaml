@@ -28,4 +28,9 @@ spec:
       containers:
         - name: users-api
           image: snadi043/users-kub-deploy:latest
+          env:
+            - name: MONGO_CONNECTION_URI
+              value: 'mongodb+srv://snadi043:fJ6Zz34blVSaiKOJ@kubernetes-eks-deployme.m0squgm.mongodb.net/users?retryWrites=true&w=majority'
+            - name: AUTH_API_ADDRESS
+              value: 'auth-service.default:3000'
 
